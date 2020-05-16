@@ -18,6 +18,7 @@ public class RowEndpoint {
     private Class produces;
     private Class query;
     private Class body;
+    private String prefix;
     private int bodyIndex;
     private int queryIndex;
 

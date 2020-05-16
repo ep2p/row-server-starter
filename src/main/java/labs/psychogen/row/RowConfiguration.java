@@ -32,6 +32,8 @@ public class RowConfiguration {
     }
 
     private void processBean(Object bean){
+        String prefix = bean.getClass().getAnnotation(RowController.class).value();
+
         for (Method method : bean.getClass().getMethods()) {
             RowIgnore ignore = method.getAnnotation(RowIgnore.class);
             if(ignore != null)
@@ -45,6 +47,7 @@ public class RowConfiguration {
                 return;
             rowEndpoint.setMethod(method);
             rowEndpoint.setBean(bean);
+            rowEndpoint.setPrefix(prefix);
             rowEndpoints.add(rowEndpoint);
         }
     }
