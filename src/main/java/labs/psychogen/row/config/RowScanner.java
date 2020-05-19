@@ -1,28 +1,29 @@
-package labs.psychogen.row;
+package labs.psychogen.row.config;
 
+import labs.psychogen.row.RowController;
+import labs.psychogen.row.RowEndpoint;
+import labs.psychogen.row.RowIgnore;
+import labs.psychogen.row.RowQuery;
+import labs.psychogen.row.repository.EndpointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-public class RowConfiguration {
+public class RowScanner {
     private final ApplicationContext ctx;
-    private final List<RowEndpoint> rowEndpoints;
+    private final EndpointRepository endpointRepository;
 
     @Autowired
-    public RowConfiguration(ApplicationContext ctx) {
+    public RowScanner(ApplicationContext ctx, EndpointRepository endpointRepository) {
         this.ctx = ctx;
-        this.rowEndpoints = new ArrayList<>();
+        this.endpointRepository = endpointRepository;
     }
-
 
     @PostConstruct
     public void init(){
@@ -30,7 +31,6 @@ public class RowConfiguration {
         allBeansWithNames.forEach((beanName, bean) -> {
             processBean(bean);
         });
-        rowEndpoints.forEach(System.out::println);
     }
 
     private void processBean(Object bean){
@@ -51,7 +51,7 @@ public class RowConfiguration {
             rowEndpoint.setMethod(method);
             rowEndpoint.setBean(bean);
             rowEndpoint.setPrefix(prefix);
-            rowEndpoints.add(rowEndpoint);
+            endpointRepository.addEndpoint(rowEndpoint);
         }
     }
 

@@ -1,5 +1,6 @@
 package labs.psychogen.row;
 
+import labs.psychogen.row.config.RowScanner;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
 
@@ -11,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Import({
-        RowConfiguration.class
+        RowScanner.class
 })
 public @interface EnableRowServer {
     @AliasFor("basePackages")

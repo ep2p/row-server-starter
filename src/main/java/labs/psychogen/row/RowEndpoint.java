@@ -3,8 +3,10 @@ package labs.psychogen.row;
 import lombok.*;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -42,5 +44,21 @@ public class RowEndpoint {
 
     public boolean isValid(){
         return addresses != null && rowMethod != null && produces != null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RowEndpoint that = (RowEndpoint) o;
+        return getRowMethod() == that.getRowMethod() &&
+                Arrays.equals(getAddresses(), that.getAddresses());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getRowMethod());
+        result = 31 * result + Arrays.hashCode(getAddresses());
+        return result;
     }
 }
