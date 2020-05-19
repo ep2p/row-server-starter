@@ -2,6 +2,7 @@ package labs.psychogen.row.controller;
 
 import labs.psychogen.row.RowController;
 import labs.psychogen.row.MyService;
+import labs.psychogen.row.RowIgnore;
 import labs.psychogen.row.RowQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,12 @@ public class TestController {
 
     @GetMapping("/get")
     public @ResponseBody MyDto get(@RowQuery String query){
+        return new MyDto("hey");
+    }
+
+    @RowIgnore
+    @GetMapping("/ignore")
+    public @ResponseBody MyDto get2(@RowQuery String query){
         return new MyDto("hey");
     }
 

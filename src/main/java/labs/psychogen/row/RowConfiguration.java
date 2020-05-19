@@ -2,6 +2,7 @@ package labs.psychogen.row;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -21,6 +22,7 @@ public class RowConfiguration {
         this.ctx = ctx;
         this.rowEndpoints = new ArrayList<>();
     }
+
 
     @PostConstruct
     public void init(){
@@ -43,6 +45,7 @@ public class RowConfiguration {
                 return;
             setProduces(method, rowEndpoint);
             setBodyAndQuery(method, rowEndpoint);
+            setPathVariables(method, rowEndpoint);
             if(!rowEndpoint.isValid())
                 return;
             rowEndpoint.setMethod(method);
@@ -71,6 +74,16 @@ public class RowConfiguration {
 
     private void setProduces(Method method, RowEndpoint rowEndpoint) {
         rowEndpoint.setProduces(method.getReturnType());
+    }
+
+    private void setPathVariables(Method method, RowEndpoint rowEndpoint){
+        for (int i = 0; i < method.getParameters().length; i++) {
+            Parameter parameter = method.getParameters()[i];
+            PathVariable pathVariable = parameter.getAnnotation(PathVariable.class);
+            if(pathVariable != null){
+                rowEndpoint.getPathVariables().put(pathVariable.value(), i);
+            }
+        }
     }
 
     private RowEndpoint getMethodAndAddress(Method method) {

@@ -3,6 +3,8 @@ package labs.psychogen.row;
 import lombok.*;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -21,6 +23,7 @@ public class RowEndpoint {
     private String prefix;
     private int bodyIndex;
     private int queryIndex;
+    private Map<String, Integer> pathVariables = new HashMap<>();
 
     public RowEndpoint(RowMethod rowMethod, String[] addresses) {
         this.rowMethod = rowMethod;
