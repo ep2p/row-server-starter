@@ -5,7 +5,6 @@ import labs.psychogen.row.RowEndpoint;
 import labs.psychogen.row.RowIgnore;
 import labs.psychogen.row.RowQuery;
 import labs.psychogen.row.repository.EndpointRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +18,7 @@ public class RowScanner {
     private final ApplicationContext ctx;
     private final EndpointRepository endpointRepository;
 
-    @Autowired
+
     public RowScanner(ApplicationContext ctx, EndpointRepository endpointRepository) {
         this.ctx = ctx;
         this.endpointRepository = endpointRepository;
