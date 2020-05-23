@@ -2,6 +2,8 @@ package labs.psychogen.row.config;
 
 import labs.psychogen.row.repository.EndpointRepository;
 import labs.psychogen.row.repository.SetEndpointRepository;
+import labs.psychogen.row.service.DefaultEndpointProvider;
+import labs.psychogen.row.service.EndpointProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
@@ -33,5 +35,12 @@ public class RowConfiguration {
     @DependsOn({"endpointRepository"})
     public RowScanner rowScanner(EndpointRepository endpointRepository){
         return new RowScanner(applicationContext, endpointRepository);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean({EndpointProvider.class})
+    @DependsOn({"endpointRepository"})
+    public EndpointProvider endpointProvider(EndpointRepository endpointRepository){
+        return new DefaultEndpointProvider(endpointRepository);
     }
 }

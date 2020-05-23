@@ -1,6 +1,5 @@
-package labs.psychogen.row;
+package labs.psychogen.row.controller;
 
-import labs.psychogen.row.controller.MyDto;
 import org.springframework.stereotype.Service;
 
 @Service

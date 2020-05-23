@@ -22,10 +22,13 @@ public class RowEndpoint {
     private Class produces;
     private Class query;
     private Class body;
-    private String prefix;
-    private int bodyIndex;
-    private int queryIndex;
+    private String prefix = "";
+    private int bodyIndex = -1;
+    private int queryIndex = -1;
     private Map<String, Integer> pathVariables = new HashMap<>();
+    private int parametersCount = 0;
+    private String finalAddress;
+
 
     public RowEndpoint(RowMethod rowMethod, String[] addresses) {
         this.rowMethod = rowMethod;

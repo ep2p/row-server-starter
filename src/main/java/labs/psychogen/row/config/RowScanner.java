@@ -42,6 +42,7 @@ public class RowScanner {
             RowEndpoint rowEndpoint = getMethodAndAddress(method);
             if(rowEndpoint == null)
                 return;
+            rowEndpoint.setParametersCount(method.getParameterCount());
             setProduces(method, rowEndpoint);
             setBodyAndQuery(method, rowEndpoint);
             setPathVariables(method, rowEndpoint);

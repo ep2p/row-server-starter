@@ -1,7 +1,6 @@
 package labs.psychogen.row.controller;
 
 import labs.psychogen.row.RowController;
-import labs.psychogen.row.MyService;
 import labs.psychogen.row.RowIgnore;
 import labs.psychogen.row.RowQuery;
 import org.springframework.beans.factory.annotation.Autowired;
