@@ -38,16 +38,17 @@ public class RowScanner {
         for (Method method : bean.getClass().getMethods()) {
             RowIgnore ignore = method.getAnnotation(RowIgnore.class);
             if(ignore != null)
-                return;
+                continue;
             RowEndpoint rowEndpoint = getMethodAndAddress(method);
             if(rowEndpoint == null)
-                return;
+                continue;
+            if(!setProduces(method, rowEndpoint))
+                continue;
             rowEndpoint.setParametersCount(method.getParameterCount());
-            setProduces(method, rowEndpoint);
             setBodyAndQuery(method, rowEndpoint);
             setPathVariables(method, rowEndpoint);
             if(!rowEndpoint.isValid())
-                return;
+                continue;
             rowEndpoint.setMethod(method);
             rowEndpoint.setBean(bean);
             rowEndpoint.setPrefix(prefix);
@@ -72,8 +73,13 @@ public class RowScanner {
         }
     }
 
-    private void setProduces(Method method, RowEndpoint rowEndpoint) {
+    private boolean setProduces(Method method, RowEndpoint rowEndpoint) {
+        ResponseBody annotation1 = method.getAnnotatedReturnType().getAnnotation(ResponseBody.class);
+        ResponseBody annotation2 = method.getAnnotation(ResponseBody.class);
+        if(annotation2 == null || annotation1 == null)
+            return false;
         rowEndpoint.setProduces(method.getReturnType());
+        return true;
     }
 
     private void setPathVariables(Method method, RowEndpoint rowEndpoint){

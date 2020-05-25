@@ -4,6 +4,8 @@ import labs.psychogen.row.config.Naming;
 import labs.psychogen.row.domain.RowWebsocketSession;
 import labs.psychogen.row.properties.WebSocketProperties;
 import labs.psychogen.row.repository.RowSessionRegistry;
+import labs.psychogen.row.service.ProtocolService;
+import labs.psychogen.row.service.RowInvokerService;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.PongMessage;
 import org.springframework.web.socket.TextMessage;
@@ -16,10 +18,14 @@ import java.util.Date;
 public class RowWebSocketHandler extends TextWebSocketHandler {
     private final RowSessionRegistry rowSessionRegistry;
     private final WebSocketProperties webSocketProperties;
+    private final RowInvokerService rowInvokerService;
+    private final ProtocolService protocolService;
 
-    public RowWebSocketHandler(RowSessionRegistry rowSessionRegistry, WebSocketProperties webSocketProperties) {
+    public RowWebSocketHandler(RowSessionRegistry rowSessionRegistry, WebSocketProperties webSocketProperties, RowInvokerService rowInvokerService) {
         this.rowSessionRegistry = rowSessionRegistry;
         this.webSocketProperties = webSocketProperties;
+        this.rowInvokerService = rowInvokerService;
+        protocolService = new ProtocolService(rowInvokerService);
     }
 
     @Override
@@ -35,7 +41,7 @@ public class RowWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         updateHeartbeat(session);
-        //handle message
+        protocolService.handle(session, message);
     }
 
     @Override

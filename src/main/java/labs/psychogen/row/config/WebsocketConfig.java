@@ -4,6 +4,7 @@ import labs.psychogen.row.properties.WebSocketProperties;
 import labs.psychogen.row.ws.RowHandshakeInterceptor;
 import labs.psychogen.row.ws.RowWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 @Configuration
 @EnableConfigurationProperties(WebSocketProperties.class)
+@ConditionalOnClass(RowConfiguration.class)
 public class WebsocketConfig implements WebSocketConfigurer {
     private final WebSocketProperties webSocketProperties;
     private final WebSocketHandler rowWebSocketHandler;

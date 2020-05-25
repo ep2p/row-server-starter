@@ -1,6 +1,9 @@
 package labs.psychogen.row.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import labs.psychogen.row.RowEndpoint;
+import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.exception.InvalidPathException;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
@@ -11,20 +14,27 @@ import java.util.Map;
 public class RowInvokerService {
     private final EndpointProvider endpointProvider;
     private final PathMatcher pathMatcher;
+    private final ObjectMapper objectMapper;
 
     public RowInvokerService(EndpointProvider endpointProvider) {
         this.endpointProvider = endpointProvider;
         pathMatcher = new AntPathMatcher();
+        objectMapper = new ObjectMapper();
     }
 
-    public Object invoke(RowEndpoint.RowMethod rowMethod, String path, Object body, Object query) throws InvalidPathException, InvocationTargetException, IllegalAccessException {
-        RowEndpoint rowEndpoint = endpointProvider.getMatchingEndpoint(rowMethod, path);
+    public Object invoke(RequestDto requestDto) throws InvalidPathException, InvocationTargetException, IllegalAccessException, JsonProcessingException {
+        RowEndpoint rowEndpoint = endpointProvider.getMatchingEndpoint(RowEndpoint.RowMethod.valueOf(requestDto.getMethod()), requestDto.getAddress());
         Object[] objects = new Object[rowEndpoint.getParametersCount()];
-        fill(rowEndpoint, path, objects, body, query);
+
+        fill(rowEndpoint, requestDto.getAddress(), objects, requestDto);
         return rowEndpoint.getMethod().invoke(rowEndpoint.getBean(), objects);
     }
 
-    private void fill(RowEndpoint rowEndpoint, String path, Object[] objects, Object body, Object query) {
+
+    private void fill(RowEndpoint rowEndpoint, String path, Object[] objects, RequestDto requestDto) throws JsonProcessingException {
+        Object body = getBody(rowEndpoint, requestDto);
+        Object query = getQuery(rowEndpoint, requestDto);
+
         Map<String, String> map = pathMatcher.extractUriTemplateVariables(rowEndpoint.getPrefix() + rowEndpoint.getFinalAddress(), path);
         map.keySet().forEach(key -> {
             Integer integer = rowEndpoint.getPathVariables().get(key);
@@ -38,6 +48,19 @@ public class RowInvokerService {
         if(rowEndpoint.getQueryIndex() != -1){
             objects[rowEndpoint.getQueryIndex()] = query;
         }
+    }
+
+    private Object getBody(RowEndpoint rowEndpoint, RequestDto requestDto) throws JsonProcessingException {
+        if(requestDto.getBody() == null)
+            return null;
+        return objectMapper.readValue(requestDto.getBody().asText(), rowEndpoint.getBody());
+    }
+
+
+    private Object getQuery(RowEndpoint rowEndpoint, RequestDto requestDto) throws JsonProcessingException {
+        if(requestDto.getQuery() == null)
+            return null;
+        return objectMapper.readValue(requestDto.getQuery().asText(), rowEndpoint.getBody());
     }
 
 }
