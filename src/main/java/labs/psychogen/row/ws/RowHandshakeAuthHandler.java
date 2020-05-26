@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public interface RowHandshakeAuthHandler {
     WebsocketUserData handshake(@Nullable String token) throws AuthenticationFailedException;
 
-    class DefaultHandshakeListener implements RowHandshakeAuthHandler {
+    class DefaultRowHandshakeAuthHandler implements RowHandshakeAuthHandler {
         private volatile AtomicLong atomicLong = new AtomicLong(0);
 
         @Override

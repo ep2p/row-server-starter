@@ -35,7 +35,7 @@ public class RowInvokerService {
         Object body = getBody(rowEndpoint, requestDto);
         Object query = getQuery(rowEndpoint, requestDto);
 
-        Map<String, String> map = pathMatcher.extractUriTemplateVariables(rowEndpoint.getPrefix() + rowEndpoint.getFinalAddress(), path);
+        Map<String, String> map = pathMatcher.extractUriTemplateVariables(rowEndpoint.getFinalAddress(), path);
         map.keySet().forEach(key -> {
             Integer integer = rowEndpoint.getPathVariables().get(key);
             objects[integer] = map.get(key);
@@ -51,16 +51,16 @@ public class RowInvokerService {
     }
 
     private Object getBody(RowEndpoint rowEndpoint, RequestDto requestDto) throws JsonProcessingException {
-        if(requestDto.getBody() == null)
+        if(requestDto.getBody() == null || requestDto.getBody().isNull())
             return null;
-        return objectMapper.readValue(requestDto.getBody().asText(), rowEndpoint.getBody());
+        return objectMapper.readValue(requestDto.getBody().toString(), rowEndpoint.getBody());
     }
 
 
     private Object getQuery(RowEndpoint rowEndpoint, RequestDto requestDto) throws JsonProcessingException {
-        if(requestDto.getQuery() == null)
+        if(requestDto.getQuery() == null || requestDto.getQuery().isNull())
             return null;
-        return objectMapper.readValue(requestDto.getQuery().asText(), rowEndpoint.getBody());
+        return objectMapper.readValue(requestDto.getQuery().toString(), rowEndpoint.getQuery());
     }
 
 }

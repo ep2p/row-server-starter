@@ -76,7 +76,7 @@ public class RowScanner {
     private boolean setProduces(Method method, RowEndpoint rowEndpoint) {
         ResponseBody annotation1 = method.getAnnotatedReturnType().getAnnotation(ResponseBody.class);
         ResponseBody annotation2 = method.getAnnotation(ResponseBody.class);
-        if(annotation2 == null || annotation1 == null)
+        if(annotation2 == null && annotation1 == null)
             return false;
         rowEndpoint.setProduces(method.getReturnType());
         return true;

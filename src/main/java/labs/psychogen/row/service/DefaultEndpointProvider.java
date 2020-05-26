@@ -23,6 +23,7 @@ public class DefaultEndpointProvider implements EndpointProvider {
             }
             for (String address : rowEndpoint.getAddresses()) {
                 if (pathMatcher.match(rowEndpoint.getPrefix() + "" + address, path)) {
+                    rowEndpoint.setFinalAddress(rowEndpoint.getPrefix() + "" + address); //limitation
                     return rowEndpoint;
                 }
             }

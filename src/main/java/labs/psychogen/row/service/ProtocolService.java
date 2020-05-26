@@ -1,5 +1,6 @@
 package labs.psychogen.row.service;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import labs.psychogen.row.domain.RowResponseStatus;
@@ -26,10 +27,12 @@ public class ProtocolService {
     public ProtocolService(RowInvokerService rowInvokerService) {
         this.rowInvokerService = rowInvokerService;
         objectMapper = new ObjectMapper();
+        objectMapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
     public void handle(WebSocketSession webSocketSession, TextMessage textMessage){
+        log.trace("received message: " + textMessage.getPayload());
         String payload = textMessage.getPayload();
         ResponseDto responseDto;
         String requestId = null;
@@ -55,6 +58,7 @@ public class ProtocolService {
                     .status(RowResponseStatus.OTHER.getId())
                     .requestId(requestId)
                     .build();
+            log.catching(e);
         } catch (InvalidPathException e) {
             responseDto = ResponseDto.builder()
                     .status(RowResponseStatus.NOT_FOUND.getId())

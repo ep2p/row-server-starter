@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.client.standard.WebSocketContainerFactoryBean;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -20,6 +21,7 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 @Configuration
 @EnableConfigurationProperties(WebSocketProperties.class)
 @ConditionalOnClass(RowConfiguration.class)
+@DependsOn({"rowHandshakeInterceptor", "rowWebSocketHandler"})
 @ConditionalOnProperty(value = "row.ws.enable", havingValue = "true")
 public class WebsocketConfig implements WebSocketConfigurer {
     private final WebSocketProperties webSocketProperties;

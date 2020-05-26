@@ -86,7 +86,7 @@ public class RowConfiguration {
     @Bean
     @ConditionalOnMissingBean({RowHandshakeAuthHandler.class})
     public RowHandshakeAuthHandler rowHandshakeAuthHandler(){
-        return new RowHandshakeAuthHandler.DefaultHandshakeListener();
+        return new RowHandshakeAuthHandler.DefaultRowHandshakeAuthHandler();
     }
 
     @Bean
@@ -95,10 +95,10 @@ public class RowConfiguration {
         return new TokenExtractor.RowTokenExtractor();
     }
 
-    @Bean
-    @DependsOn({"rowHandshakeListener", "tokenExtractor"})
-    public HandshakeInterceptor rowHandshakeInterceptor(RowHandshakeAuthHandler rowHandshakeListener, TokenExtractor tokenExtractor){
-        return new RowHandshakeInterceptor(rowHandshakeListener, tokenExtractor);
+    @Bean("rowHandshakeInterceptor")
+    @DependsOn({"rowHandshakeAuthHandler", "tokenExtractor"})
+    public HandshakeInterceptor rowHandshakeInterceptor(RowHandshakeAuthHandler rowHandshakeAuthHandler, TokenExtractor tokenExtractor){
+        return new RowHandshakeInterceptor(rowHandshakeAuthHandler, tokenExtractor);
     }
 
 
