@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 public class WebSocketProperties {
+    private boolean enable = true;
     private int maxBinaryBuffer = 8 * 1024 * 1024;
     private int maxTextBuffer = 4 * 1024 * 1024;
     private long maximumSessionIdle = 5 * 60 * 1000;;

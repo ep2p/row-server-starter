@@ -1,6 +1,7 @@
 package labs.psychogen.row.config;
 
 import labs.psychogen.row.properties.HandlerProperties;
+import labs.psychogen.row.properties.RowProperties;
 import labs.psychogen.row.properties.WebSocketProperties;
 import labs.psychogen.row.repository.EndpointRepository;
 import labs.psychogen.row.repository.RowSessionRegistry;
@@ -26,8 +27,8 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 
 @Configuration
 @EnableWebSocket
-@EnableConfigurationProperties({WebSocketProperties.class, HandlerProperties.class})
-@ConditionalOnProperty(value = "psychogen.row", havingValue = "true")
+@EnableConfigurationProperties({WebSocketProperties.class, HandlerProperties.class, RowProperties.class})
+@ConditionalOnProperty(value = "row.enable", havingValue = "true")
 @Import(WebsocketConfig.class)
 public class RowConfiguration {
     private final ApplicationContext applicationContext;
