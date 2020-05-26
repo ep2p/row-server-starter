@@ -51,14 +51,14 @@ public class RowInvokerService {
     }
 
     private Object getBody(RowEndpoint rowEndpoint, RequestDto requestDto) throws JsonProcessingException {
-        if(requestDto.getBody() == null || requestDto.getBody().isNull())
+        if(requestDto.getBody() == null || requestDto.getBody().isNull() || rowEndpoint.getBody() == null)
             return null;
         return objectMapper.readValue(requestDto.getBody().toString(), rowEndpoint.getBody());
     }
 
 
     private Object getQuery(RowEndpoint rowEndpoint, RequestDto requestDto) throws JsonProcessingException {
-        if(requestDto.getQuery() == null || requestDto.getQuery().isNull())
+        if(requestDto.getQuery() == null || requestDto.getQuery().isNull() || rowEndpoint.getQuery() == null)
             return null;
         return objectMapper.readValue(requestDto.getQuery().toString(), rowEndpoint.getQuery());
     }
