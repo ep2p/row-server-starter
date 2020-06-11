@@ -5,37 +5,41 @@ import labs.psychogen.row.RowEndpoint;
 import labs.psychogen.row.RowIgnore;
 import labs.psychogen.row.RowQuery;
 import labs.psychogen.row.repository.EndpointRepository;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Map;
 
 public class RowScanner {
-    private final ApplicationContext ctx;
     private final EndpointRepository endpointRepository;
 
-
-    public RowScanner(ApplicationContext ctx, EndpointRepository endpointRepository) {
-        this.ctx = ctx;
+    public RowScanner(EndpointRepository endpointRepository) {
         this.endpointRepository = endpointRepository;
     }
 
-    @PostConstruct
-    public void init(){
-        Map<String, Object> allBeansWithNames = ctx.getBeansWithAnnotation(RowController.class);
+    public void init(ApplicationContext applicationContext){
+        Map<String, Object> allBeansWithNames = applicationContext.getBeansWithAnnotation(RowController.class);
+        if(allBeansWithNames == null)
+            return;
         allBeansWithNames.forEach((beanName, bean) -> {
             processBean(bean);
         });
     }
 
     private void processBean(Object bean){
-        String prefix = bean.getClass().getAnnotation(RowController.class).value();
+        if(AopUtils.isAopProxy(bean)){
+            handleBean(bean, AopUtils.getTargetClass(bean));
+        }
+    }
 
-        for (Method method : bean.getClass().getMethods()) {
+    private void handleBean(Object bean, Class<?> aClass) {
+        String prefix = aClass.getAnnotation(RowController.class).value();
+
+        for (Method method : aClass.getMethods()) {
             RowIgnore ignore = method.getAnnotation(RowIgnore.class);
             if(ignore != null)
                 continue;

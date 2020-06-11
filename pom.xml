@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>labs.psychogen</groupId>
 	<artifactId>springboot-row-starter</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1-t5-SNAPSHOT</version>
 	<name>Springboot Rest Over Websocket Starter</name>
 	<description>Spring boot starter for Rest Over Websocket</description>
 	<developers>
@@ -85,6 +85,16 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.5</version>
 			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
 	</dependencies>

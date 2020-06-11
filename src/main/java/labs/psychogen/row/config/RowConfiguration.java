@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -29,15 +28,13 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 @EnableWebSocket
 @EnableConfigurationProperties({WebSocketProperties.class, HandlerProperties.class, RowProperties.class})
 @ConditionalOnProperty(value = "row.enable", havingValue = "true")
-@Import(WebsocketConfig.class)
+@Import({WebsocketConfig.class, RowApplicationListener.class})
 public class RowConfiguration {
-    private final ApplicationContext applicationContext;
     private final WebSocketProperties webSocketProperties;
     private final HandlerProperties handlerProperties;
 
     @Autowired
-    public RowConfiguration(ApplicationContext applicationContext, WebSocketProperties webSocketProperties, HandlerProperties handlerProperties) {
-        this.applicationContext = applicationContext;
+    public RowConfiguration(WebSocketProperties webSocketProperties, HandlerProperties handlerProperties) {
         this.webSocketProperties = webSocketProperties;
         this.handlerProperties = handlerProperties;
     }
@@ -52,7 +49,7 @@ public class RowConfiguration {
     @ConditionalOnMissingBean({RowScanner.class})
     @DependsOn({"endpointRepository"})
     public RowScanner rowScanner(EndpointRepository endpointRepository){
-        return new RowScanner(applicationContext, endpointRepository);
+        return new RowScanner(endpointRepository);
     }
 
     @Bean
