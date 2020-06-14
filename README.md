@@ -10,6 +10,6 @@ As the name suggests, ROW creates an websocket endpoint and provides json based 
 ## TODO
 
 - [x] Filter chain for request handling (So developers can add their own filters)
-- [ ] Session authentication to work with `@PreAuthorize`
-- [ ] Pass current user session to controller methods as argument if an annotation is present
+- [ ] Add support for spring security and `@PreAuthorize` annotations
+- [ ] Create row context so current user information is accessible.
 - [ ] Add metrics
