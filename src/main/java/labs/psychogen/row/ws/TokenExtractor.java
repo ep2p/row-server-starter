@@ -1,12 +1,13 @@
 package labs.psychogen.row.ws;
 
+import labs.psychogen.row.exception.AuthenticationFailedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.ServerHttpRequest;
 
 import java.util.List;
 
 public interface TokenExtractor {
-    String getToken(ServerHttpRequest serverHttpRequest);
+    String getToken(ServerHttpRequest serverHttpRequest) throws AuthenticationFailedException;
 
     class SecWebsocketProtocolTokenExtractor implements TokenExtractor {
         @Override

@@ -1,37 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE project [
-		<!ELEMENT project (modelVersion|parent|groupId|artifactId|version|name|description|developers|properties|dependencies)*>
-		<!ATTLIST project
-				xmlns CDATA #REQUIRED
-				xmlns:xsi CDATA #REQUIRED
-				xsi:schemaLocation CDATA #REQUIRED>
-		<!ELEMENT modelVersion (#PCDATA)>
-		<!ELEMENT parent (groupId|artifactId|version|relativePath)*>
-		<!ELEMENT groupId (#PCDATA)>
-		<!ELEMENT artifactId (#PCDATA)>
-		<!ELEMENT version (#PCDATA)>
-		<!ELEMENT relativePath (#PCDATA)>
-		<!ELEMENT name (#PCDATA)>
-		<!ELEMENT description (#PCDATA)>
-		<!ELEMENT developers (developer)*>
-		<!ELEMENT developer (id|name|organization|organizationUrl|url|email|timezone|roles)*>
-		<!ELEMENT id (#PCDATA)>
-		<!ELEMENT organization (#PCDATA)>
-		<!ELEMENT organizationUrl (#PCDATA)>
-		<!ELEMENT url (#PCDATA)>
-		<!ELEMENT email (#PCDATA)>
-		<!ELEMENT timezone (#PCDATA)>
-		<!ELEMENT roles (role)*>
-		<!ELEMENT role (#PCDATA)>
-		<!ELEMENT properties (java.version)*>
-		<!ELEMENT java.version (#PCDATA)>
-		<!ELEMENT dependencies (dependency)*>
-		<!ELEMENT dependency (groupId|artifactId|optional|scope|exclusions|version)*>
-		<!ELEMENT optional (#PCDATA)>
-		<!ELEMENT scope (#PCDATA)>
-		<!ELEMENT exclusions (exclusion)*>
-		<!ELEMENT exclusion (groupId|artifactId)*>
-		]>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -43,7 +10,7 @@
 	</parent>
 	<groupId>labs.psychogen</groupId>
 	<artifactId>springboot-row-starter</artifactId>
-	<version>1.0.1-t7-SNAPSHOT</version>
+	<version>1.0.1-t16-SNAPSHOT</version>
 	<name>Springboot Rest Over Websocket Starter</name>
 	<description>Spring boot starter for Rest Over Websocket</description>
 	<developers>

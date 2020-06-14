@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Proxy;
 import java.util.Map;
 
 public class RowScanner {
@@ -37,6 +38,9 @@ public class RowScanner {
     }
 
     private void handleBean(Object bean, Class<?> aClass) {
+        if (aClass.getAnnotation(RowController.class) == null) {
+            return;
+        }
         String prefix = aClass.getAnnotation(RowController.class).value();
 
         for (Method method : aClass.getMethods()) {

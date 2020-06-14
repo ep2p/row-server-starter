@@ -29,10 +29,11 @@ public class RowWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String userId = (String) session.getAttributes().get(Naming.USER_ID_ATTRIBUTE_NAME);
+        Object extra = session.getAttributes().get(Naming.EXTRA_ATTRIBUTE_NAME);
         rowSessionRegistry.addSession(RowWebsocketSession.builder()
                 .session(new ConcurrentWebSocketSessionDecorator(session, (int) webSocketProperties.getMaximumAsyncSendTimeout(), webSocketProperties.getMaxBinaryBuffer()))
                 .userId(userId)
-
+                .extra(extra)
                 .build());
         updateHeartbeat(session);
     }
