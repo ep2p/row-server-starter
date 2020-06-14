@@ -9,19 +9,20 @@ public interface TokenExtractor {
     String getToken(ServerHttpRequest serverHttpRequest);
 
     class RowTokenExtractor implements TokenExtractor {
-
         @Override
         public String getToken(ServerHttpRequest serverHttpRequest) {
             HttpHeaders handshakeHeaders = serverHttpRequest.getHeaders();
             if (handshakeHeaders.containsKey("Sec-WebSocket-Protocol")) {
                 List<String> wecWebsocketProtocol = handshakeHeaders.get("Sec-WebSocket-Protocol");
                 for (String parts : wecWebsocketProtocol) {
-                    String[] split = parts.split(";");
+                    String[] split = parts.split(",");
                     for (String keyValue : split) {
-                        String[] kvPair = keyValue.split(":");
-                        if (kvPair.length == 2) {
-                            if (kvPair[0].equals("token")) {
-                                return kvPair[1];
+                        if(keyValue.contains(":")){
+                            String[] kvPair = keyValue.split(":");
+                            if (kvPair.length == 2) {
+                                if (kvPair[0].equals("token")) {
+                                    return kvPair[1];
+                                }
                             }
                         }
                     }

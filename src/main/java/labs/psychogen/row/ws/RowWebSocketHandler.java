@@ -18,13 +18,11 @@ import java.util.Date;
 public class RowWebSocketHandler extends TextWebSocketHandler {
     private final RowSessionRegistry rowSessionRegistry;
     private final WebSocketProperties webSocketProperties;
-    private final RowInvokerService rowInvokerService;
     private final ProtocolService protocolService;
 
     public RowWebSocketHandler(RowSessionRegistry rowSessionRegistry, WebSocketProperties webSocketProperties, RowInvokerService rowInvokerService) {
         this.rowSessionRegistry = rowSessionRegistry;
         this.webSocketProperties = webSocketProperties;
-        this.rowInvokerService = rowInvokerService;
         protocolService = new ProtocolService(rowInvokerService);
     }
 
