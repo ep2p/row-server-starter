@@ -1,5 +1,8 @@
 package labs.psychogen.row.config;
 
+import labs.psychogen.row.filter.RowFilter;
+import labs.psychogen.row.filter.RowFilterChain;
+import labs.psychogen.row.filter.RowInvokerFiler;
 import labs.psychogen.row.properties.HandlerProperties;
 import labs.psychogen.row.properties.RowProperties;
 import labs.psychogen.row.properties.WebSocketProperties;
@@ -23,6 +26,10 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.HandshakeInterceptor;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Configuration
 @EnableWebSocket
@@ -74,12 +81,6 @@ public class RowConfiguration {
         return new RowInvokerService(endpointProvider);
     }
 
-    @Bean("rowWebSocketHandler")
-    @DependsOn({"sessionRegistry", "rowInvokerService"})
-    public RowWebSocketHandler rowWebSocketHandler(RowSessionRegistry sessionRegistry, RowInvokerService rowInvokerService){
-        return new RowWebSocketHandler(sessionRegistry, webSocketProperties, rowInvokerService);
-    }
-
     @Bean
     @ConditionalOnMissingBean({RowHandshakeAuthHandler.class})
     public RowHandshakeAuthHandler rowHandshakeAuthHandler(){
@@ -96,6 +97,26 @@ public class RowConfiguration {
     @DependsOn({"rowHandshakeAuthHandler", "tokenExtractor"})
     public HandshakeInterceptor rowHandshakeInterceptor(RowHandshakeAuthHandler rowHandshakeAuthHandler, TokenExtractor tokenExtractor){
         return new RowHandshakeInterceptor(rowHandshakeAuthHandler, tokenExtractor);
+    }
+
+    @Bean("rowInvokerFilter")
+    @DependsOn("rowInvokerService")
+    public RowFilter rowInvokerFilter(RowInvokerService rowInvokerService){
+        return new RowInvokerFiler(rowInvokerService);
+    }
+
+    @Bean("rowFilterChain")
+    @DependsOn("rowInvokerFilter")
+    public RowFilterChain rowFilterChain(RowFilter rowInvokerFilter){
+        List<RowFilter> rowFilters = new CopyOnWriteArrayList<>();
+        rowFilters.add(rowInvokerFilter);
+        return new RowFilterChain(rowFilters);
+    }
+
+    @Bean("rowWebSocketHandler")
+    @DependsOn({"sessionRegistry", "rowFilterChain"})
+    public RowWebSocketHandler rowWebSocketHandler(RowSessionRegistry sessionRegistry, RowFilterChain rowFilterChain){
+        return new RowWebSocketHandler(sessionRegistry, webSocketProperties, rowFilterChain);
     }
 
 

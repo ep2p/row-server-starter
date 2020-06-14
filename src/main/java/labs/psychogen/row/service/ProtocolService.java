@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import labs.psychogen.row.domain.RowResponseStatus;
 import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.domain.protocol.ResponseDto;
-import labs.psychogen.row.exception.InvalidPathException;
+import labs.psychogen.row.filter.RowFilterChain;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,17 +15,16 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 @Log4j2
 public class ProtocolService {
-    private final RowInvokerService rowInvokerService;
+    private final RowFilterChain rowFilterChain;
     private final ObjectMapper objectMapper;
     private final Validator validator;
 
-    public ProtocolService(RowInvokerService rowInvokerService) {
-        this.rowInvokerService = rowInvokerService;
+    public ProtocolService(RowFilterChain rowFilterChain) {
+        this.rowFilterChain = rowFilterChain;
         objectMapper = new ObjectMapper();
         objectMapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
         validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -34,7 +33,7 @@ public class ProtocolService {
     public void handle(WebSocketSession webSocketSession, TextMessage textMessage){
         log.trace("received message: " + textMessage.getPayload());
         String payload = textMessage.getPayload();
-        ResponseDto responseDto;
+        ResponseDto responseDto = ResponseDto.builder().build();
         String requestId = null;
         try {
             RequestDto requestDto = objectMapper.readValue(payload, RequestDto.class);
@@ -46,12 +45,8 @@ public class ProtocolService {
                         .status(RowResponseStatus.PROTOCOL_ERROR.getId())
                         .build();
             }else {
-                Object result = rowInvokerService.invoke(requestDto);
-                responseDto = ResponseDto.builder()
-                        .status(RowResponseStatus.OK.getId())
-                        .requestId(requestDto.getId())
-                        .body(result)
-                        .build();
+                responseDto.setRequestId(requestId);
+                rowFilterChain.filter(requestDto, responseDto);
             }
         } catch (JsonProcessingException e) {
             responseDto = ResponseDto.builder()
@@ -59,16 +54,8 @@ public class ProtocolService {
                     .requestId(requestId)
                     .build();
             log.catching(e);
-        } catch (InvalidPathException e) {
-            responseDto = ResponseDto.builder()
-                    .status(RowResponseStatus.NOT_FOUND.getId())
-                    .requestId(requestId)
-                    .build();
-        } catch (InvocationTargetException | IllegalAccessException e) {
-            responseDto = ResponseDto.builder()
-                    .status(RowResponseStatus.INTERNAL_SERVER_ERROR.getId())
-                    .requestId(requestId)
-                    .build();
+        } catch (Exception e) {
+            responseDto.setStatus(RowResponseStatus.INTERNAL_SERVER_ERROR);
             log.catching(e);
         }
 
