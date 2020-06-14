@@ -33,7 +33,7 @@ public class ProtocolService {
     public void handle(WebSocketSession webSocketSession, TextMessage textMessage){
         log.trace("received message: " + textMessage.getPayload());
         String payload = textMessage.getPayload();
-        ResponseDto responseDto = ResponseDto.builder().build();
+        ResponseDto responseDto = ResponseDto.builder().status(RowResponseStatus.OK.getId()).build();
         String requestId = null;
         try {
             RequestDto requestDto = objectMapper.readValue(payload, RequestDto.class);
