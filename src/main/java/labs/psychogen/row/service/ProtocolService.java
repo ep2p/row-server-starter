@@ -3,6 +3,10 @@ package labs.psychogen.row.service;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import labs.psychogen.row.config.Naming;
+import labs.psychogen.row.context.DefaultContextImpl;
+import labs.psychogen.row.context.RowContextHolder;
+import labs.psychogen.row.context.RowUser;
 import labs.psychogen.row.domain.RowResponseStatus;
 import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.domain.protocol.ResponseDto;
@@ -33,6 +37,7 @@ public class ProtocolService {
     public void handle(WebSocketSession webSocketSession, TextMessage textMessage){
         log.trace("received message: " + textMessage.getPayload());
         String payload = textMessage.getPayload();
+        fillContext(webSocketSession);
         ResponseDto responseDto = ResponseDto.builder().status(RowResponseStatus.OK.getId()).build();
         String requestId = null;
         try {
@@ -65,5 +70,13 @@ public class ProtocolService {
         } catch (IOException e) {
             log.catching(e);
         }
+    }
+
+    private void fillContext(WebSocketSession webSocketSession) {
+        RowContextHolder.setContext(
+                new DefaultContextImpl(
+                        new RowUser((String) webSocketSession.getAttributes().get(Naming.USER_ID_ATTRIBUTE_NAME))
+                )
+        );
     }
 }

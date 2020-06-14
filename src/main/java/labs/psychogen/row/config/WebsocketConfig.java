@@ -1,7 +1,8 @@
 package labs.psychogen.row.config;
 
 import labs.psychogen.row.properties.WebSocketProperties;
-import labs.psychogen.row.ws.RowHandshakeInterceptor;
+import labs.psychogen.row.ws.RowHandshakeTokenInterceptor;
+import labs.psychogen.row.ws.RowProtocolHandshakeInterceptor;
 import labs.psychogen.row.ws.RowWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -21,18 +22,18 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 @Configuration
 @EnableConfigurationProperties(WebSocketProperties.class)
 @ConditionalOnClass(RowConfiguration.class)
-@DependsOn({"rowHandshakeInterceptor", "rowWebSocketHandler"})
+@DependsOn({"rowHandshakeTokenInterceptor", "rowWebSocketHandler"})
 @ConditionalOnProperty(value = "row.ws.enable", havingValue = "true")
 public class WebsocketConfig implements WebSocketConfigurer {
     private final WebSocketProperties webSocketProperties;
     private final WebSocketHandler rowWebSocketHandler;
-    private final RowHandshakeInterceptor rowHandshakeInterceptor;
+    private final RowHandshakeTokenInterceptor rowHandshakeTokenInterceptor;
 
     @Autowired
-    public WebsocketConfig(WebSocketProperties webSocketProperties, RowWebSocketHandler rowWebSocketHandler, RowHandshakeInterceptor rowHandshakeInterceptor) {
+    public WebsocketConfig(WebSocketProperties webSocketProperties, RowWebSocketHandler rowWebSocketHandler, RowHandshakeTokenInterceptor rowHandshakeTokenInterceptor) {
         this.webSocketProperties = webSocketProperties;
         this.rowWebSocketHandler = rowWebSocketHandler;
-        this.rowHandshakeInterceptor = rowHandshakeInterceptor;
+        this.rowHandshakeTokenInterceptor = rowHandshakeTokenInterceptor;
     }
 
     @Bean
@@ -52,6 +53,6 @@ public class WebsocketConfig implements WebSocketConfigurer {
             .addHandler(rowWebSocketHandler, webSocketProperties.getPrefix())
             .setAllowedOrigins(webSocketProperties.getAllowedOrigins())
             .setHandshakeHandler(new DefaultHandshakeHandler(new TomcatRequestUpgradeStrategy()))
-            .addInterceptors(rowHandshakeInterceptor);
+            .addInterceptors(new RowProtocolHandshakeInterceptor(), rowHandshakeTokenInterceptor);
     }
 }

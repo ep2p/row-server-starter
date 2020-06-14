@@ -13,7 +13,7 @@ import labs.psychogen.row.service.DefaultEndpointProvider;
 import labs.psychogen.row.service.EndpointProvider;
 import labs.psychogen.row.service.RowInvokerService;
 import labs.psychogen.row.ws.RowHandshakeAuthHandler;
-import labs.psychogen.row.ws.RowHandshakeInterceptor;
+import labs.psychogen.row.ws.RowHandshakeTokenInterceptor;
 import labs.psychogen.row.ws.RowWebSocketHandler;
 import labs.psychogen.row.ws.TokenExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -90,13 +89,13 @@ public class RowConfiguration {
     @Bean
     @ConditionalOnMissingBean({TokenExtractor.class})
     public TokenExtractor tokenExtractor(){
-        return new TokenExtractor.RowTokenExtractor();
+        return new TokenExtractor.SecWebsocketProtocolTokenExtractor();
     }
 
-    @Bean("rowHandshakeInterceptor")
+    @Bean("rowHandshakeTokenInterceptor")
     @DependsOn({"rowHandshakeAuthHandler", "tokenExtractor"})
     public HandshakeInterceptor rowHandshakeInterceptor(RowHandshakeAuthHandler rowHandshakeAuthHandler, TokenExtractor tokenExtractor){
-        return new RowHandshakeInterceptor(rowHandshakeAuthHandler, tokenExtractor);
+        return new RowHandshakeTokenInterceptor(rowHandshakeAuthHandler, tokenExtractor);
     }
 
     @Bean("rowInvokerFilter")

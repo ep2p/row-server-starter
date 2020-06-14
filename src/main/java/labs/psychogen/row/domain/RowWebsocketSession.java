@@ -13,6 +13,7 @@ import java.util.Objects;
 public class RowWebsocketSession {
     private volatile WebSocketSession session;
     private String userId;
+    private Object extra;
 
     @Override
     public boolean equals(Object o) {

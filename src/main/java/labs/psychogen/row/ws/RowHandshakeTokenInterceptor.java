@@ -11,11 +11,11 @@ import java.util.Map;
 
 import static labs.psychogen.row.config.Naming.USER_ID_ATTRIBUTE_NAME;
 
-public class RowHandshakeInterceptor implements HandshakeInterceptor {
+public class RowHandshakeTokenInterceptor implements HandshakeInterceptor {
     private final RowHandshakeAuthHandler rowHandshakeAuthHandler;
     private final TokenExtractor tokenExtractor;
 
-    public RowHandshakeInterceptor(RowHandshakeAuthHandler rowHandshakeAuthHandler, TokenExtractor tokenExtractor) {
+    public RowHandshakeTokenInterceptor(RowHandshakeAuthHandler rowHandshakeAuthHandler, TokenExtractor tokenExtractor) {
         this.rowHandshakeAuthHandler = rowHandshakeAuthHandler;
         this.tokenExtractor = tokenExtractor;
     }

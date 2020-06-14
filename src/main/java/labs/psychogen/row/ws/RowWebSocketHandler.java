@@ -32,6 +32,7 @@ public class RowWebSocketHandler extends TextWebSocketHandler {
         rowSessionRegistry.addSession(RowWebsocketSession.builder()
                 .session(new ConcurrentWebSocketSessionDecorator(session, (int) webSocketProperties.getMaximumAsyncSendTimeout(), webSocketProperties.getMaxBinaryBuffer()))
                 .userId(userId)
+
                 .build());
         updateHeartbeat(session);
     }

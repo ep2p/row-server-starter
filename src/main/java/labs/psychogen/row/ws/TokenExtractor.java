@@ -8,7 +8,7 @@ import java.util.List;
 public interface TokenExtractor {
     String getToken(ServerHttpRequest serverHttpRequest);
 
-    class RowTokenExtractor implements TokenExtractor {
+    class SecWebsocketProtocolTokenExtractor implements TokenExtractor {
         @Override
         public String getToken(ServerHttpRequest serverHttpRequest) {
             HttpHeaders handshakeHeaders = serverHttpRequest.getHeaders();

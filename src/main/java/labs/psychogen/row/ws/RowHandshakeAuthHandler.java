@@ -14,7 +14,7 @@ public interface RowHandshakeAuthHandler {
 
         @Override
         public WebsocketUserData handshake(String token) {
-            return new WebsocketUserData(String.valueOf(atomicLong.getAndIncrement()));
+            return new WebsocketUserData(String.valueOf(atomicLong.getAndIncrement()), null);
         }
     }
 }

@@ -11,4 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class WebsocketUserData {
     private String id;
+    private Object extra;
 }

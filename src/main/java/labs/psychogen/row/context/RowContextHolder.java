@@ -7,8 +7,8 @@ import java.lang.reflect.Constructor;
 
 public class RowContextHolder {
     public static final String MODE_THREADLOCAL = "MODE_THREADLOCAL";
-    public static final String MODE_INHERITABLETHREADLOCAL = "MODE_INHERITABLETHREADLOCAL";
-    public static final String MODE_GLOBAL = "MODE_GLOBAL";
+//    public static final String MODE_INHERITABLETHREADLOCAL = "MODE_INHERITABLETHREADLOCAL";
+//    public static final String MODE_GLOBAL = "MODE_GLOBAL";
     public static final String SYSTEM_PROPERTY = "spring.security.strategy";
     private static String strategyName = System.getProperty(SYSTEM_PROPERTY);
     private static RowContextHolderStrategy strategy;
@@ -31,10 +31,10 @@ public class RowContextHolder {
 
     private static void initialize() {
         if (!StringUtils.hasText(strategyName)) {
-            strategyName = "MODE_THREADLOCAL";
+            strategyName = MODE_THREADLOCAL;
         }
 
-        if (strategyName.equals("MODE_THREADLOCAL")) {
+        if (strategyName.equals(MODE_THREADLOCAL)) {
             strategy = new ThreadLocalRowContextHolderStrategy();
         } else {
             try {
