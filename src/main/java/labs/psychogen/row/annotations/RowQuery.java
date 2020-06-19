@@ -1,4 +1,4 @@
-package labs.psychogen.row;
+package labs.psychogen.row.annotations;
 
 import java.lang.annotation.*;
 

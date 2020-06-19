@@ -1,4 +1,4 @@
-package labs.psychogen.row;
+package labs.psychogen.row.annotations;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;

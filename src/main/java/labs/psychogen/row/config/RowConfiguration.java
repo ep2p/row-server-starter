@@ -112,6 +112,12 @@ public class RowConfiguration {
         return new RowFilterChain(rowFilters);
     }
 
+    @Bean("filterScanner")
+    @DependsOn("rowFilterChain")
+    public FilterScanner filterScanner(RowFilterChain rowFilterChain){
+        return new FilterScanner(rowFilterChain);
+    }
+
     @Bean("rowWebSocketHandler")
     @DependsOn({"sessionRegistry", "rowFilterChain"})
     public RowWebSocketHandler rowWebSocketHandler(RowSessionRegistry sessionRegistry, RowFilterChain rowFilterChain){
