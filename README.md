@@ -21,3 +21,4 @@ A demo of this project is available [here](https://github.com/psychogen-labs/row
 - [X] Add annotation support to register filters more easily
 - [ ] Add publisher and subscriber structure
 - [ ] Add a way to set order filters
+- [ ] Add trace logs
