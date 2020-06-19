@@ -9,6 +9,9 @@ As the name suggests, ROW creates a websocket endpoint and provides json based p
 ## Documentations
 Everything you need to know is covered in [wiki pages](https://github.com/psychogen-labs/spring-rest-over-ws/wiki).
 
+## Demo
+A demo of this project is available [here](https://github.com/psychogen-labs/row-demo).
+
 ## TODO
 
 - [x] Filter chain for request handling (So developers can add their own filters)
