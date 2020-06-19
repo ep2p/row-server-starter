@@ -1,9 +1,9 @@
 package labs.psychogen.row.config;
 
-import labs.psychogen.row.RowController;
+import labs.psychogen.row.annotations.RowController;
 import labs.psychogen.row.RowEndpoint;
-import labs.psychogen.row.RowIgnore;
-import labs.psychogen.row.RowQuery;
+import labs.psychogen.row.annotations.RowIgnore;
+import labs.psychogen.row.annotations.RowQuery;
 import labs.psychogen.row.repository.EndpointRepository;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.context.ApplicationContext;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.Proxy;
 import java.util.Map;
 
 public class RowScanner {
@@ -24,8 +23,6 @@ public class RowScanner {
 
     public void init(ApplicationContext applicationContext){
         Map<String, Object> allBeansWithNames = applicationContext.getBeansWithAnnotation(RowController.class);
-        if(allBeansWithNames == null)
-            return;
         allBeansWithNames.forEach((beanName, bean) -> {
             processBean(bean);
         });
