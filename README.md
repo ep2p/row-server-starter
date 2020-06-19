@@ -13,5 +13,7 @@ Everything you need to know is covered in [wiki pages](https://github.com/psycho
 
 - [x] Filter chain for request handling (So developers can add their own filters)
 - [X] Add support for spring security and `@PreAuthorize` annotations
-- [X] Create row context so current user information is accessible.
+- [X] Create row context so current user information is accessible
 - [ ] Add metrics
+- [ ] Add annotation support to register filters more easily
+- [ ] Add publisher and subscriber structure
