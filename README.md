@@ -17,3 +17,4 @@ Everything you need to know is covered in [wiki pages](https://github.com/psycho
 - [ ] Add metrics
 - [X] Add annotation support to register filters more easily
 - [ ] Add publisher and subscriber structure
+- [ ] Add a way to set order filters
