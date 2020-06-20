@@ -19,6 +19,15 @@ public class RowFilterChain {
         filters.add(rowFilter);
     }
 
+    public boolean hasFilter(Class c){
+        for (RowFilter filter : filters) {
+            if (filter.getClass().equals(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void addFilterBefore(RowFilter rowFilter, Class before){
         for (RowFilter filter : filters) {
             if(filter.getClass().equals(before)){
