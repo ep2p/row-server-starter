@@ -22,3 +22,5 @@ A demo of this project is available [here](https://github.com/psychogen-labs/row
 - [ ] Add publisher and subscriber structure
 - [X] Add a way to set order for filters
 - [ ] Add trace logs
+- [ ] Heartbeat system
+- [ ] Pass request response to controller
