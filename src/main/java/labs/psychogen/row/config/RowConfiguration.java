@@ -9,9 +9,8 @@ import labs.psychogen.row.properties.WebSocketProperties;
 import labs.psychogen.row.repository.EndpointRepository;
 import labs.psychogen.row.repository.RowSessionRegistry;
 import labs.psychogen.row.repository.SetEndpointRepository;
-import labs.psychogen.row.service.DefaultEndpointProvider;
-import labs.psychogen.row.service.EndpointProvider;
-import labs.psychogen.row.service.RowInvokerService;
+import labs.psychogen.row.repository.SubscriptionRegistry;
+import labs.psychogen.row.service.*;
 import labs.psychogen.row.ws.RowHandshakeAuthHandler;
 import labs.psychogen.row.ws.RowHandshakeTokenInterceptor;
 import labs.psychogen.row.ws.RowWebSocketHandler;
@@ -124,5 +123,21 @@ public class RowConfiguration {
         return new RowWebSocketHandler(sessionRegistry, webSocketProperties, rowFilterChain);
     }
 
+    @Bean("subscriptionRegistry")
+    public SubscriptionRegistry subscriptionRegistry(){
+        return new SubscriptionRegistry.RowSubscriptionRegistry();
+    }
+
+    @Bean("subscriberService")
+    @DependsOn("subscriptionRegistry")
+    public SubscriberService subscriberService(SubscriptionRegistry subscriptionRegistry){
+        return new SubscriberService(subscriptionRegistry);
+    }
+
+    @Bean("publisherService")
+    @DependsOn({"subscriptionRegistry", "rowSessionRegistry"})
+    public PublisherService publisherService(SubscriptionRegistry subscriptionRegistry, RowSessionRegistry rowSessionRegistry){
+        return new PublisherService(subscriptionRegistry, rowSessionRegistry);
+    }
 
 }
