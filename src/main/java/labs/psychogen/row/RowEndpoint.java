@@ -2,7 +2,6 @@ package labs.psychogen.row;
 
 import labs.psychogen.row.annotations.PostSubscribe;
 import labs.psychogen.row.annotations.PreSubscribe;
-import labs.psychogen.row.event.Subscription;
 import lombok.*;
 
 import java.lang.reflect.Method;

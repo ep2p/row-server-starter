@@ -2,7 +2,10 @@ package labs.psychogen.row.repository;
 
 import labs.psychogen.row.event.Subscription;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public interface SubscriptionRegistry {

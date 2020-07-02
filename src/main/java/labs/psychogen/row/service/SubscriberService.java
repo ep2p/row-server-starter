@@ -1,7 +1,7 @@
 package labs.psychogen.row.service;
 
-import labs.psychogen.row.event.Subscription;
 import labs.psychogen.row.event.PublishStrategy;
+import labs.psychogen.row.event.Subscription;
 import labs.psychogen.row.repository.SubscriptionRegistry;
 
 public class SubscriberService {
