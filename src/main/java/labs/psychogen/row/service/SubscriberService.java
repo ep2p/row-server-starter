@@ -28,6 +28,7 @@ public class SubscriberService {
                 return Info.builder()
                         .sessionId(sessionId)
                         .userId(userId)
+                        .strategy(strategy)
                         .build();
             }
 
