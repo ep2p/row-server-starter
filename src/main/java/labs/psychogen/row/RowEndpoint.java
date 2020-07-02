@@ -1,5 +1,8 @@
 package labs.psychogen.row;
 
+import labs.psychogen.row.annotations.PostSubscribe;
+import labs.psychogen.row.annotations.PreSubscribe;
+import labs.psychogen.row.event.Subscription;
 import lombok.*;
 
 import java.lang.reflect.Method;
@@ -28,7 +31,8 @@ public class RowEndpoint {
     private Map<String, Integer> pathVariables = new HashMap<>();
     private int parametersCount = 0;
     private String finalAddress;
-
+    private PostSubscribe postSubscribe;
+    private PreSubscribe preSubscribe;
 
     public RowEndpoint(RowMethod rowMethod, String[] addresses) {
         this.rowMethod = rowMethod;

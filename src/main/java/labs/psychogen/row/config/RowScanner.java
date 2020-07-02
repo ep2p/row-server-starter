@@ -1,9 +1,7 @@
 package labs.psychogen.row.config;
 
-import labs.psychogen.row.annotations.RowController;
 import labs.psychogen.row.RowEndpoint;
-import labs.psychogen.row.annotations.RowIgnore;
-import labs.psychogen.row.annotations.RowQuery;
+import labs.psychogen.row.annotations.*;
 import labs.psychogen.row.repository.EndpointRepository;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.context.ApplicationContext;
@@ -34,6 +32,7 @@ public class RowScanner {
         }
     }
 
+    //todo: create bean handler pipeline
     private void handleBean(Object bean, Class<?> aClass) {
         if (aClass.getAnnotation(RowController.class) == null) {
             return;
@@ -52,6 +51,7 @@ public class RowScanner {
             rowEndpoint.setParametersCount(method.getParameterCount());
             setBodyAndQuery(method, rowEndpoint);
             setPathVariables(method, rowEndpoint);
+            setSubscription(method, rowEndpoint);
             if(!rowEndpoint.isValid())
                 continue;
             rowEndpoint.setMethod(method);
@@ -116,6 +116,13 @@ public class RowScanner {
             }
         }
         return null;
+    }
+
+    private void setSubscription(Method method, RowEndpoint rowEndpoint){
+        PreSubscribe preSubscribe = method.getAnnotation(PreSubscribe.class);
+        PostSubscribe postSubscribe = method.getAnnotation(PostSubscribe.class);
+        rowEndpoint.setPostSubscribe(postSubscribe);
+        rowEndpoint.setPreSubscribe(preSubscribe);
     }
 
 }
