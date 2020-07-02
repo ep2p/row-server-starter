@@ -3,6 +3,7 @@ package labs.psychogen.row.config;
 import labs.psychogen.row.filter.RowFilter;
 import labs.psychogen.row.filter.RowFilterChain;
 import labs.psychogen.row.filter.RowInvokerFiler;
+import labs.psychogen.row.filter.SubscribeFilter;
 import labs.psychogen.row.properties.HandlerProperties;
 import labs.psychogen.row.properties.RowProperties;
 import labs.psychogen.row.properties.WebSocketProperties;
@@ -101,10 +102,12 @@ public class RowConfiguration {
     }
 
     @Bean("rowFilterChain")
-    @DependsOn("rowInvokerFilter")
-    public RowFilterChain rowFilterChain(RowFilter rowInvokerFilter){
+    @DependsOn({"rowInvokerFilter", "subscriberService"})
+    public RowFilterChain rowFilterChain(RowFilter rowInvokerFilter, SubscriberService subscriberService){
         List<RowFilter> rowFilters = new CopyOnWriteArrayList<>();
+        rowFilters.add(new SubscribeFilter(subscriberService, true));
         rowFilters.add(rowInvokerFilter);
+        rowFilters.add(new SubscribeFilter(subscriberService, false));
         return new RowFilterChain(rowFilters);
     }
 
@@ -133,9 +136,9 @@ public class RowConfiguration {
     }
 
     @Bean("subscriberService")
-    @DependsOn("subscriptionRegistry")
-    public SubscriberService subscriberService(SubscriptionRegistry subscriptionRegistry){
-        return new SubscriberService(subscriptionRegistry);
+    @DependsOn({"subscriptionRegistry", "endpointProvider"})
+    public SubscriberService subscriberService(SubscriptionRegistry subscriptionRegistry, EndpointProvider endpointProvider){
+        return new SubscriberService(subscriptionRegistry, endpointProvider);
     }
 
     @Bean("publisherService")
