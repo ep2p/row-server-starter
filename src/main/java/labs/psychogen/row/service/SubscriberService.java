@@ -30,6 +30,19 @@ public class SubscriberService {
                         .userId(userId)
                         .build();
             }
+
+            @Override
+            public boolean equals(Object obj) {
+                if(obj == null)
+                    return false;
+                if(obj instanceof Subscription){
+                    return ((Subscription) obj).event().equals(this.event())
+                            && ((Subscription) obj).info().getStrategy().name().equals(this.info().getStrategy().name())
+                            && ((Subscription) obj).info().getStrategy().name().equals("SINGLE_SESSION") ?
+                            ((Subscription) obj).info().getUserId().equals(this.info().getUserId()) : ((Subscription) obj).info().getSessionId().equals(this.info().getSessionId());
+                }
+                return false;
+            }
         };
         subscriptionRegistry.addSubscription(subscription);
         return subscription;
