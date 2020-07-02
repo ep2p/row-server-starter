@@ -51,7 +51,7 @@ public class ProtocolService {
                         .build();
             }else {
                 responseDto.setRequestId(requestId);
-                rowFilterChain.filter(requestDto, responseDto);
+                rowFilterChain.filter(requestDto, responseDto, webSocketSession);
             }
         } catch (JsonProcessingException e) {
             responseDto = ResponseDto.builder()
@@ -75,7 +75,7 @@ public class ProtocolService {
     private void fillContext(WebSocketSession webSocketSession) {
         RowContextHolder.setContext(
                 new DefaultContextImpl(
-                        new RowUser((String) webSocketSession.getAttributes().get(Naming.USER_ID_ATTRIBUTE_NAME))
+                        new RowUser((String) webSocketSession.getAttributes().get(Naming.USER_ID_ATTRIBUTE_NAME), webSocketSession.getId())
                 )
         );
     }

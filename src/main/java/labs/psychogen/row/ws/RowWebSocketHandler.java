@@ -6,29 +6,33 @@ import labs.psychogen.row.filter.RowFilterChain;
 import labs.psychogen.row.properties.WebSocketProperties;
 import labs.psychogen.row.repository.RowSessionRegistry;
 import labs.psychogen.row.service.ProtocolService;
+import labs.psychogen.row.utl.WebsocketSessionUtil;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.PongMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-
 import java.util.Date;
 
 public class RowWebSocketHandler extends TextWebSocketHandler {
     private final RowSessionRegistry rowSessionRegistry;
     private final WebSocketProperties webSocketProperties;
     private final ProtocolService protocolService;
+    private final RowWsListener rowWsListener;
+    private final boolean trackHeartbeats;
 
-    public RowWebSocketHandler(RowSessionRegistry rowSessionRegistry, WebSocketProperties webSocketProperties, RowFilterChain rowFilterChain) {
+    public RowWebSocketHandler(RowSessionRegistry rowSessionRegistry, WebSocketProperties webSocketProperties, RowFilterChain rowFilterChain, RowWsListener rowWsListener, boolean trackHeartbeats) {
         this.rowSessionRegistry = rowSessionRegistry;
         this.webSocketProperties = webSocketProperties;
+        this.rowWsListener = rowWsListener;
+        this.trackHeartbeats = trackHeartbeats;
         protocolService = new ProtocolService(rowFilterChain);
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        String userId = (String) session.getAttributes().get(Naming.USER_ID_ATTRIBUTE_NAME);
+        String userId = WebsocketSessionUtil.getUserId(session);
         Object extra = session.getAttributes().get(Naming.EXTRA_ATTRIBUTE_NAME);
         rowSessionRegistry.addSession(RowWebsocketSession.builder()
                 .session(new ConcurrentWebSocketSessionDecorator(session, (int) webSocketProperties.getMaximumAsyncSendTimeout(), webSocketProperties.getMaxBinaryBuffer()))
@@ -36,12 +40,13 @@ public class RowWebSocketHandler extends TextWebSocketHandler {
                 .extra(extra)
                 .build());
         updateHeartbeat(session);
+        rowWsListener.onOpen(session);
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        updateHeartbeat(session);
         protocolService.handle(session, message);
+        updateHeartbeat(session);
     }
 
     @Override
@@ -52,11 +57,15 @@ public class RowWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         super.handleTransportError(session, exception);
+        session.close();
+        rowWsListener.onTransportError(session, exception);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        super.afterConnectionClosed(session, status);
+        String userId = WebsocketSessionUtil.getUserId(session);
+        rowSessionRegistry.removeSession(userId, session.getId());
+        rowWsListener.onConnectionClose(session, status);
     }
 
     @Override
@@ -67,6 +76,7 @@ public class RowWebSocketHandler extends TextWebSocketHandler {
     //--------------------
 
     private void updateHeartbeat(WebSocketSession session) {
-        session.getAttributes().put(Naming.IN_HEARTBEAT_ATTRIBUTE_NAME, new Date());
+        if(trackHeartbeats)
+            session.getAttributes().put(Naming.IN_HEARTBEAT_ATTRIBUTE_NAME, new Date());
     }
 }

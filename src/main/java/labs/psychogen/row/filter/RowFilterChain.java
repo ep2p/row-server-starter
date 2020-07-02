@@ -3,6 +3,7 @@ package labs.psychogen.row.filter;
 import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.domain.protocol.ResponseDto;
 import org.springframework.util.Assert;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.util.List;
 
@@ -48,9 +49,9 @@ public class RowFilterChain {
         }
     }
 
-    public void filter(RequestDto requestDto, ResponseDto response) throws Exception {
+    public void filter(RequestDto requestDto, ResponseDto response, WebSocketSession session) throws Exception {
         for (RowFilter filter : filters) {
-            if (!filter.filter(requestDto, response)) {
+            if (!filter.filter(requestDto, response, session)) {
                 return;
             }
         }

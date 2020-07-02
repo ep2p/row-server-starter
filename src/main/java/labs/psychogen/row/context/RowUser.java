@@ -9,4 +9,5 @@ import lombok.*;
 @Builder
 public class RowUser {
     private String userId;
+    private String sessionId;
 }

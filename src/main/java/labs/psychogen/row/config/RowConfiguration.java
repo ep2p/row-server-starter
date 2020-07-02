@@ -11,10 +11,7 @@ import labs.psychogen.row.repository.RowSessionRegistry;
 import labs.psychogen.row.repository.SetEndpointRepository;
 import labs.psychogen.row.repository.SubscriptionRegistry;
 import labs.psychogen.row.service.*;
-import labs.psychogen.row.ws.RowHandshakeAuthHandler;
-import labs.psychogen.row.ws.RowHandshakeTokenInterceptor;
-import labs.psychogen.row.ws.RowWebSocketHandler;
-import labs.psychogen.row.ws.TokenExtractor;
+import labs.psychogen.row.ws.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -117,10 +114,17 @@ public class RowConfiguration {
         return new FilterScanner(rowFilterChain);
     }
 
+    @Bean("rowWsListener")
+    @ConditionalOnMissingBean(RowWsListener.class)
+    public RowWsListener rowWsListener(){
+        return new RowWsListener.DummyRowWsListener();
+    }
+
+
     @Bean("rowWebSocketHandler")
-    @DependsOn({"sessionRegistry", "rowFilterChain"})
-    public RowWebSocketHandler rowWebSocketHandler(RowSessionRegistry sessionRegistry, RowFilterChain rowFilterChain){
-        return new RowWebSocketHandler(sessionRegistry, webSocketProperties, rowFilterChain);
+    @DependsOn({"sessionRegistry", "rowFilterChain", "rowWsListener"})
+    public RowWebSocketHandler rowWebSocketHandler(RowSessionRegistry sessionRegistry, RowFilterChain rowFilterChain, RowWsListener rowWsListener){
+        return new RowWebSocketHandler(sessionRegistry, webSocketProperties, rowFilterChain, rowWsListener, handlerProperties.isTrackHeartbeats());
     }
 
     @Bean("subscriptionRegistry")

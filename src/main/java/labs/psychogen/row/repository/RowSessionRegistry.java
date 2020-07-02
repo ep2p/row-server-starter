@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public interface RowSessionRegistry {
     void addSession(RowWebsocketSession rowWebsocketSession);
     RowWebsocketSession getSession(String userId);
+    RowWebsocketSession getSession(String userId, String sessionId);
     Collection<RowWebsocketSession> getSessions(String userId);
     void removeSession(String userId, @Nullable String sessionId);
     Collection<RowWebsocketSession> getAll();
@@ -36,6 +37,15 @@ public interface RowSessionRegistry {
         @Override
         public RowWebsocketSession getSession(String userId) {
             return sessionMap.get(userId);
+        }
+
+        @Override
+        public RowWebsocketSession getSession(String userId, String sessionId) {
+            for (RowWebsocketSession session : getSessions(userId)) {
+                if(session.getSession().getId().equals(sessionId))
+                    return session;
+            }
+            return null;
         }
 
         @Override
@@ -71,6 +81,16 @@ public interface RowSessionRegistry {
             List<RowWebsocketSession> rowWebsocketSessions = sessionMap.get(userId);
             if(rowWebsocketSessions != null && rowWebsocketSessions.size() > 0)
                 return rowWebsocketSessions.get(0);
+            return null;
+        }
+
+        @Override
+        public RowWebsocketSession getSession(String userId, String sessionId) {
+            for (RowWebsocketSession session : getSessions(userId)) {
+                if(session.getSession().getId().equals(sessionId))
+                    return session;
+            }
+
             return null;
         }
 

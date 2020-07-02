@@ -8,5 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 public class HandlerProperties {
-    private boolean allowMultipleSessionsForSingleUser = false;
+    private boolean allowMultipleSessionsForSingleUser = true;
+    private boolean trackHeartbeats = true;
 }
