@@ -20,6 +20,9 @@ public class PublisherService {
                 try {
                     subscription.info().getStrategy().publish(json, rowWebsocketSession, subscription);
                 } catch (IOException e) {
+                    if(!rowWebsocketSession.getSession().isOpen()){
+                        subscriptionRegistry.removeSubscription(subscription);
+                    }
                     e.printStackTrace(); //todo
                 }
             });
