@@ -1,12 +1,13 @@
 package labs.psychogen.row.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import labs.psychogen.row.filter.RowFilter;
 import labs.psychogen.row.filter.RowFilterChain;
 import labs.psychogen.row.filter.RowInvokerFiler;
 import labs.psychogen.row.filter.SubscribeFilter;
-import labs.psychogen.row.properties.HandlerProperties;
-import labs.psychogen.row.properties.RowProperties;
-import labs.psychogen.row.properties.WebSocketProperties;
+import labs.psychogen.row.config.properties.HandlerProperties;
+import labs.psychogen.row.config.properties.RowProperties;
+import labs.psychogen.row.config.properties.WebSocketProperties;
 import labs.psychogen.row.repository.EndpointRepository;
 import labs.psychogen.row.repository.RowSessionRegistry;
 import labs.psychogen.row.repository.SetEndpointRepository;
@@ -21,17 +22,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
 @EnableWebSocket
 @EnableConfigurationProperties({WebSocketProperties.class, HandlerProperties.class, RowProperties.class})
 @ConditionalOnProperty(value = "row.enable", havingValue = "true")
-@Import({WebsocketConfig.class, RowApplicationListener.class})
+@Import({WebsocketConfig.class, RowApplicationListener.class, PublisherProxyConfig.class, PublisherProxyBeansRegistrar.class, PublisherProxyConfig.class})
 public class RowConfiguration {
     private final WebSocketProperties webSocketProperties;
     private final HandlerProperties handlerProperties;
@@ -145,6 +149,26 @@ public class RowConfiguration {
     @DependsOn({"subscriptionRegistry", "rowSessionRegistry"})
     public PublisherService publisherService(SubscriptionRegistry subscriptionRegistry, RowSessionRegistry rowSessionRegistry){
         return new PublisherService(subscriptionRegistry, rowSessionRegistry);
+    }
+
+    @Bean("rowTaskExecutor")
+    public TaskExecutor rowTaskExecutor(RowProperties rowProperties){
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setQueueCapacity(10);
+        taskExecutor.setQueueCapacity(rowProperties.getPublisherQueue());
+        taskExecutor.setMaxPoolSize(rowProperties.getPublisherMaxPoolSize());
+        taskExecutor.setAllowCoreThreadTimeOut(false);
+        taskExecutor.setCorePoolSize(rowProperties.getPublisherCorePoolSize());
+        taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
+        taskExecutor.setBeanName("rowTaskExecutor");
+        return taskExecutor;
+    }
+
+    @Bean("objectMapper")
+    @ConditionalOnMissingBean(ObjectMapper.class)
+    public ObjectMapper objectMapper(){
+        return new ObjectMapper();
     }
 
 }

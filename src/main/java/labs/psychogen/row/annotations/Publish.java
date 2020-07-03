@@ -7,4 +7,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface Publish {
     String value(); //event
+    boolean async();
+    String bean() default "";
 }

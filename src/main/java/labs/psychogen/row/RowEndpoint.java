@@ -24,10 +24,15 @@ public class RowEndpoint {
     private Class produces;
     private Class query;
     private Class body;
+    @Builder.Default
     private String prefix = "";
+    @Builder.Default
     private int bodyIndex = -1;
+    @Builder.Default
     private int queryIndex = -1;
+    @Builder.Default
     private Map<String, Integer> pathVariables = new HashMap<>();
+    @Builder.Default
     private int parametersCount = 0;
     private String finalAddress;
     private PostSubscribe postSubscribe;

@@ -3,7 +3,7 @@ package labs.psychogen.row.ws;
 import labs.psychogen.row.config.Naming;
 import labs.psychogen.row.domain.RowWebsocketSession;
 import labs.psychogen.row.filter.RowFilterChain;
-import labs.psychogen.row.properties.WebSocketProperties;
+import labs.psychogen.row.config.properties.WebSocketProperties;
 import labs.psychogen.row.repository.RowSessionRegistry;
 import labs.psychogen.row.service.ProtocolService;
 import labs.psychogen.row.utl.WebsocketSessionUtil;

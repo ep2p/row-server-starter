@@ -1,4 +1,4 @@
-package labs.psychogen.row.properties;
+package labs.psychogen.row.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;

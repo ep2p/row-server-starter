@@ -1,6 +1,6 @@
 package labs.psychogen.row.config;
 
-import labs.psychogen.row.properties.WebSocketProperties;
+import labs.psychogen.row.config.properties.WebSocketProperties;
 import labs.psychogen.row.ws.RowHandshakeTokenInterceptor;
 import labs.psychogen.row.ws.RowProtocolHandshakeInterceptor;
 import labs.psychogen.row.ws.RowWebSocketHandler;
