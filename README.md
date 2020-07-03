@@ -24,3 +24,4 @@ A demo of this project is available [here](https://github.com/psychogen-labs/row
 - [ ] Add trace logs
 - [ ] Heartbeat system
 - [ ] Pass request response to controller
+- [ ] Add request and response Headers
