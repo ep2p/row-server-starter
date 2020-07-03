@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import labs.psychogen.row.RowEndpoint;
 import labs.psychogen.row.domain.protocol.RequestDto;
+import labs.psychogen.row.domain.protocol.ResponseDto;
 import labs.psychogen.row.exception.InvalidPathException;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
@@ -22,14 +23,14 @@ public class RowInvokerService {
         objectMapper = new ObjectMapper();
     }
 
-    public Object invoke(RequestDto requestDto) throws InvalidPathException, InvocationTargetException, IllegalAccessException, JsonProcessingException {
+    public Object invoke(RequestDto requestDto, ResponseDto responseDto) throws InvalidPathException, InvocationTargetException, IllegalAccessException, JsonProcessingException {
         RowEndpoint rowEndpoint = endpointProvider.getMatchingEndpoint(RowEndpoint.RowMethod.valueOf(requestDto.getMethod()), requestDto.getAddress());
         Object[] objects = new Object[rowEndpoint.getParametersCount()];
-        fill(rowEndpoint, requestDto.getAddress(), objects, requestDto);
+        fill(rowEndpoint, requestDto.getAddress(), objects, requestDto, responseDto);
         return rowEndpoint.getMethod().invoke(rowEndpoint.getBean(), objects);
     }
 
-    private void fill(RowEndpoint rowEndpoint, String path, Object[] objects, RequestDto requestDto) throws JsonProcessingException {
+    private void fill(RowEndpoint rowEndpoint, String path, Object[] objects, RequestDto requestDto, ResponseDto responseDto) throws JsonProcessingException {
         Object body = getBody(rowEndpoint, requestDto);
         Object query = getQuery(rowEndpoint, requestDto);
 
@@ -45,6 +46,14 @@ public class RowInvokerService {
 
         if(rowEndpoint.getQueryIndex() != -1){
             objects[rowEndpoint.getQueryIndex()] = query;
+        }
+
+        if(rowEndpoint.getRequestIndex() != -1){
+            objects[rowEndpoint.getRequestIndex()] = requestDto;
+        }
+
+        if(rowEndpoint.getResponseIndex() != -1){
+            objects[rowEndpoint.getResponseIndex()] = responseDto;
         }
     }
 

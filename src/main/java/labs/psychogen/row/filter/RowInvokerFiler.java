@@ -19,7 +19,7 @@ public class RowInvokerFiler implements RowFilter {
     @Override
     public boolean filter(RequestDto requestDto, ResponseDto responseDto, WebSocketSession webSocketSession) throws Exception {
         try {
-            Object invoke = rowInvokerService.invoke(requestDto);
+            Object invoke = rowInvokerService.invoke(requestDto, responseDto);
             responseDto.setBody(invoke);
         }catch (InvalidPathException e) {
             responseDto.setStatus(RowResponseStatus.NOT_FOUND);

@@ -2,6 +2,8 @@ package labs.psychogen.row.config;
 
 import labs.psychogen.row.RowEndpoint;
 import labs.psychogen.row.annotations.*;
+import labs.psychogen.row.domain.protocol.RequestDto;
+import labs.psychogen.row.domain.protocol.ResponseDto;
 import labs.psychogen.row.repository.EndpointRepository;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.context.ApplicationContext;
@@ -51,6 +53,7 @@ public class RowScanner {
             rowEndpoint.setParametersCount(method.getParameterCount());
             setBodyAndQuery(method, rowEndpoint);
             setPathVariables(method, rowEndpoint);
+            setRequestResponseIndex(method, rowEndpoint);
             setSubscription(method, rowEndpoint);
             if(!rowEndpoint.isValid())
                 continue;
@@ -93,6 +96,18 @@ public class RowScanner {
             PathVariable pathVariable = parameter.getAnnotation(PathVariable.class);
             if(pathVariable != null){
                 rowEndpoint.getPathVariables().put(pathVariable.value(), i);
+            }
+        }
+    }
+
+    private void setRequestResponseIndex(Method method, RowEndpoint rowEndpoint){
+        for(int i = 0; i < method.getParameters().length; i++){
+            Parameter parameter = method.getParameters()[i];
+            if (parameter.getType().equals(RequestDto.class)) {
+                rowEndpoint.setRequestIndex(i);
+            }
+            if (parameter.getType().equals(ResponseDto.class)) {
+                rowEndpoint.setResponseIndex(i);
             }
         }
     }

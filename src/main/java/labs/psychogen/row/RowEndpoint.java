@@ -37,6 +37,10 @@ public class RowEndpoint {
     private String finalAddress;
     private PostSubscribe postSubscribe;
     private PreSubscribe preSubscribe;
+    @Builder.Default
+    private int requestIndex = -1;
+    @Builder.Default
+    private int responseIndex = -1;
 
     public RowEndpoint(RowMethod rowMethod, String[] addresses) {
         this.rowMethod = rowMethod;
