@@ -129,8 +129,8 @@ public class RowConfiguration {
 
 
     @Bean("rowWebSocketHandler")
-    @DependsOn({"sessionRegistry", "rowFilterChain", "rowWsListener"})
-    public RowWebSocketHandler rowWebSocketHandler(RowSessionRegistry sessionRegistry, RowFilterChain rowFilterChain, RowWsListener rowWsListener){
+    @DependsOn({"sessionRegistry", "rowFilterChain", "rowWsListener", "subscriptionRegistry"})
+    public RowWebSocketHandler rowWebSocketHandler(RowSessionRegistry sessionRegistry, RowFilterChain rowFilterChain, RowWsListener rowWsListener, SubscriptionRegistry subscriptionRegistry){
         return new RowWebSocketHandler(sessionRegistry, webSocketProperties, rowFilterChain, rowWsListener, subscriptionRegistry, handlerProperties.isTrackHeartbeats());
     }
 
