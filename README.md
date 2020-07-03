@@ -19,7 +19,7 @@ A demo of this project is available [here](https://github.com/psychogen-labs/row
 - [X] Create row context so current user information is accessible
 - [ ] Add metrics
 - [X] Add annotation support to register filters more easily
-- [ ] Add publisher and subscriber structure
+- [ ] **Add publisher and subscriber structure**
 - [X] Add a way to set order for filters
 - [ ] Add trace logs
 - [ ] Heartbeat system
