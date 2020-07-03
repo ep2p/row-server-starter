@@ -11,6 +11,8 @@ import labs.psychogen.row.event.Subscription;
 import labs.psychogen.row.exception.InvalidPathException;
 import labs.psychogen.row.repository.SubscriptionRegistry;
 
+import java.util.Base64;
+
 public class SubscriberService {
     private final SubscriptionRegistry subscriptionRegistry;
     private final EndpointProvider endpointProvider;
@@ -42,6 +44,11 @@ public class SubscriberService {
             }
 
             @Override
+            public String id() {
+                return subscriptionIdGenerator(event, userId, sessionId);
+            }
+
+            @Override
             public boolean equals(Object obj) {
                 if(obj == null)
                     return false;
@@ -54,8 +61,10 @@ public class SubscriberService {
                 return false;
             }
         };
-        subscriptionRegistry.addSubscription(subscription);
-        return subscription;
+        if (subscriptionRegistry.addSubscription(subscription)) {
+            return subscription;
+        }
+        return null;
     }
 
     public final void handleSubscription(RequestDto requestDto, boolean pre) throws InvalidPathException {
@@ -70,6 +79,11 @@ public class SubscriberService {
             if(postSubscribe != null)
                 subscribe(postSubscribe.value(), postSubscribe.strategy().getPublishStrategy(), rowUser.getUserId(), rowUser.getSessionId());
         }
+    }
+
+    private String subscriptionIdGenerator(String event, String userId, String sessionId){
+        String id = event + "." + userId + "." + sessionId;
+        return Base64.getEncoder().encodeToString(id.getBytes());
     }
 
 }

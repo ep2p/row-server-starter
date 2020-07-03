@@ -9,7 +9,7 @@ public interface Subscription {
     void close();
     String event();
     Info info();
-
+    String id();
 
     @Getter
     @Setter
