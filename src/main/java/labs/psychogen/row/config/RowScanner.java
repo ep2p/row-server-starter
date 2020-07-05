@@ -55,6 +55,7 @@ public class RowScanner {
             setPathVariables(method, rowEndpoint);
             setRequestResponseIndex(method, rowEndpoint);
             setSubscription(method, rowEndpoint);
+            setUnsubscribe(method, rowEndpoint);
             if(!rowEndpoint.isValid())
                 continue;
             rowEndpoint.setMethod(method);
@@ -140,4 +141,7 @@ public class RowScanner {
         rowEndpoint.setPreSubscribe(preSubscribe);
     }
 
+    private void setUnsubscribe(Method method, RowEndpoint rowEndpoint){
+        rowEndpoint.setUnSubscribe(method.getAnnotation(UnSubscribe.class));
+    }
 }

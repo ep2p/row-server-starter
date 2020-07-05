@@ -2,6 +2,7 @@ package labs.psychogen.row;
 
 import labs.psychogen.row.annotations.PostSubscribe;
 import labs.psychogen.row.annotations.PreSubscribe;
+import labs.psychogen.row.annotations.UnSubscribe;
 import lombok.*;
 
 import java.lang.reflect.Method;
@@ -41,6 +42,7 @@ public class RowEndpoint {
     private int requestIndex = -1;
     @Builder.Default
     private int responseIndex = -1;
+    private UnSubscribe unSubscribe;
 
     public RowEndpoint(RowMethod rowMethod, String[] addresses) {
         this.rowMethod = rowMethod;
