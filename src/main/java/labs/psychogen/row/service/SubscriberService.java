@@ -3,6 +3,7 @@ package labs.psychogen.row.service;
 import labs.psychogen.row.RowEndpoint;
 import labs.psychogen.row.annotations.PostSubscribe;
 import labs.psychogen.row.annotations.PreSubscribe;
+import labs.psychogen.row.annotations.UnSubscribe;
 import labs.psychogen.row.context.RowContextHolder;
 import labs.psychogen.row.context.RowUser;
 import labs.psychogen.row.domain.protocol.RequestDto;
@@ -10,8 +11,11 @@ import labs.psychogen.row.event.PublishStrategy;
 import labs.psychogen.row.event.Subscription;
 import labs.psychogen.row.exception.InvalidPathException;
 import labs.psychogen.row.repository.SubscriptionRegistry;
+import labs.psychogen.row.utl.RequestResponseUtil;
 
 import java.util.Base64;
+
+import static labs.psychogen.row.config.Naming.SUBSCRIPTION_Id_HEADER_NAME;
 
 public class SubscriberService {
     private final SubscriptionRegistry subscriptionRegistry;
@@ -67,23 +71,35 @@ public class SubscriberService {
         return null;
     }
 
-    public final void handleSubscription(RequestDto requestDto, boolean pre) throws InvalidPathException {
+    public final Subscription handleSubscription(RequestDto requestDto, boolean pre) throws InvalidPathException {
         RowEndpoint matchingEndpoint = endpointProvider.getMatchingEndpoint(RowEndpoint.RowMethod.valueOf(requestDto.getMethod()), requestDto.getAddress());
         RowUser rowUser = RowContextHolder.getContext().getRowUser();
+        Subscription subscription = null;
+
         if(pre){
             PreSubscribe preSubscribe = matchingEndpoint.getPreSubscribe();
             if(preSubscribe != null)
-                subscribe(preSubscribe.value(), preSubscribe.strategy().getPublishStrategy(), rowUser.getUserId(), rowUser.getSessionId());
+                subscription = subscribe(preSubscribe.value(), preSubscribe.strategy().getPublishStrategy(), rowUser.getUserId(), rowUser.getSessionId());
         }else {
             PostSubscribe postSubscribe = matchingEndpoint.getPostSubscribe();
             if(postSubscribe != null)
-                subscribe(postSubscribe.value(), postSubscribe.strategy().getPublishStrategy(), rowUser.getUserId(), rowUser.getSessionId());
+                subscription = subscribe(postSubscribe.value(), postSubscribe.strategy().getPublishStrategy(), rowUser.getUserId(), rowUser.getSessionId());
         }
+
+        return subscription;
+    }
+
+    public void handleUnsubscribe(RequestDto requestDto) throws InvalidPathException {
+        RowEndpoint matchingEndpoint = endpointProvider.getMatchingEndpoint(RowEndpoint.RowMethod.valueOf(requestDto.getMethod()), requestDto.getAddress());
+        UnSubscribe unSubscribe = matchingEndpoint.getUnSubscribe();
+        if(unSubscribe == null)
+            return;
+        RowUser rowUser = RowContextHolder.getContext().getRowUser();
+        subscriptionRegistry.unsubscribe(unSubscribe.value(), RequestResponseUtil.getHeaderValue(SUBSCRIPTION_Id_HEADER_NAME, requestDto));
     }
 
     private String subscriptionIdGenerator(String event, String userId, String sessionId){
         String id = event + "." + userId + "." + sessionId;
         return Base64.getEncoder().encodeToString(id.getBytes());
     }
-
 }

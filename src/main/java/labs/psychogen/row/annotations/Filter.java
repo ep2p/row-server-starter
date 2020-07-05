@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Documented
 @Component
 public @interface Filter {
-    Type type();
+    Type type() default Type.BEFORE;
     Class before() default RowInvokerFiler.class;
     Class after() default RowInvokerFiler.class;
 

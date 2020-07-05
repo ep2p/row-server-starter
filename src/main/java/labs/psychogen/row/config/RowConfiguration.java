@@ -1,10 +1,7 @@
 package labs.psychogen.row.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import labs.psychogen.row.filter.RowFilter;
-import labs.psychogen.row.filter.RowFilterChain;
-import labs.psychogen.row.filter.RowInvokerFiler;
-import labs.psychogen.row.filter.SubscribeFilter;
+import labs.psychogen.row.filter.*;
 import labs.psychogen.row.config.properties.HandlerProperties;
 import labs.psychogen.row.config.properties.RowProperties;
 import labs.psychogen.row.config.properties.WebSocketProperties;
@@ -110,6 +107,7 @@ public class RowConfiguration {
     public RowFilterChain rowFilterChain(RowFilter rowInvokerFilter, SubscriberService subscriberService){
         List<RowFilter> rowFilters = new CopyOnWriteArrayList<>();
         rowFilters.add(new SubscribeFilter(subscriberService, true));
+        rowFilters.add(new UnSubscribeFilter(subscriberService));
         rowFilters.add(rowInvokerFilter);
         rowFilters.add(new SubscribeFilter(subscriberService, false));
         return new RowFilterChain(rowFilters);
