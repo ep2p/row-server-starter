@@ -1,16 +1,13 @@
 package labs.psychogen.row.domain.protocol;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestDto {
@@ -25,5 +22,6 @@ public class RequestDto {
     private String address;
     private JsonNode query;
     private JsonNode body;
+    private Map<String, String> header;
     private Double version = 1.0;
 }
