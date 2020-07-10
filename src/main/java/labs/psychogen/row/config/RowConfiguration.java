@@ -33,7 +33,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableWebSocket
 @EnableConfigurationProperties({WebSocketProperties.class, HandlerProperties.class, RowProperties.class})
 @ConditionalOnProperty(value = "row.enable", havingValue = "true")
-@Import({WebsocketConfig.class, RowApplicationListener.class, PublisherProxyBeansRegistrar.class})
+@Import({WebsocketConfig.class, RowApplicationListener.class})
 public class RowConfiguration {
     private final WebSocketProperties webSocketProperties;
     private final HandlerProperties handlerProperties;
@@ -177,7 +177,7 @@ public class RowConfiguration {
     }
 
     //publisher proxy config
-    @Bean
+    /*@Bean
     @ConditionalOnMissingBean(EventPublisherProxy.class)
     @DependsOn(value = {"rowTaskExecutor","publisherService"})
     public EventPublisherProxy publisherProxy(TaskExecutor rowTaskExecutor, PublisherService publisherService) {
@@ -187,6 +187,6 @@ public class RowConfiguration {
     @Bean(name = "publisherProxyBeanFactory")
     public PublisherProxyBeanFactory webServiceProxyBeanFactory() {
         return new PublisherProxyBeanFactory();
-    }
+    }*/
 
 }
