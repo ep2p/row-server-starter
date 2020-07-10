@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.HashMap;
 import java.util.Map;
 
 public class RowScanner {
@@ -96,6 +97,8 @@ public class RowScanner {
             Parameter parameter = method.getParameters()[i];
             PathVariable pathVariable = parameter.getAnnotation(PathVariable.class);
             if(pathVariable != null){
+                if(rowEndpoint.getPathVariables() == null)
+                    rowEndpoint.setPathVariables(new HashMap<>());
                 rowEndpoint.getPathVariables().put(pathVariable.value(), i);
             }
         }
