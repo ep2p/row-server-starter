@@ -12,18 +12,18 @@ import static labs.psychogen.row.config.Naming.SUBSCRIPTION_EVENT_HEADER_NAME;
 
 public class PublisherService {
     private final SubscriptionRegistry subscriptionRegistry;
-    private final RowSessionRegistry sessionRegistry;
+    private final RowSessionRegistry rowSessionRegistry;
     private final ObjectMapper objectMapper;
 
-    public PublisherService(SubscriptionRegistry subscriptionRegistry, RowSessionRegistry sessionRegistry, ObjectMapper objectMapper) {
+    public PublisherService(SubscriptionRegistry subscriptionRegistry, RowSessionRegistry rowSessionRegistry, ObjectMapper objectMapper) {
         this.subscriptionRegistry = subscriptionRegistry;
-        this.sessionRegistry = sessionRegistry;
+        this.rowSessionRegistry = rowSessionRegistry;
         this.objectMapper = objectMapper;
     }
 
     public final void publish(String event, Object message){
         subscriptionRegistry.getSubscriptions(event).forEach(subscription -> {
-            sessionRegistry.getSessions(subscription.info().getUserId()).forEach(rowWebsocketSession -> {
+            rowSessionRegistry.getSessions(subscription.info().getUserId()).forEach(rowWebsocketSession -> {
                 try {
                     String json = objectMapper.writeValueAsString(getResponse(message, event));
                     subscription.info().getStrategy().publish(json, rowWebsocketSession, subscription);

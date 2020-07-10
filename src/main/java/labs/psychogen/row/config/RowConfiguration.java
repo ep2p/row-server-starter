@@ -1,6 +1,7 @@
 package labs.psychogen.row.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import labs.psychogen.row.event.EventPublisherProxy;
 import labs.psychogen.row.filter.*;
 import labs.psychogen.row.config.properties.HandlerProperties;
 import labs.psychogen.row.config.properties.RowProperties;
@@ -32,7 +33,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableWebSocket
 @EnableConfigurationProperties({WebSocketProperties.class, HandlerProperties.class, RowProperties.class})
 @ConditionalOnProperty(value = "row.enable", havingValue = "true")
-@Import({WebsocketConfig.class, RowApplicationListener.class, PublisherProxyConfig.class, PublisherProxyBeansRegistrar.class, PublisherProxyConfig.class})
+@Import({WebsocketConfig.class, RowApplicationListener.class, PublisherProxyBeansRegistrar.class})
 public class RowConfiguration {
     private final WebSocketProperties webSocketProperties;
     private final HandlerProperties handlerProperties;
@@ -63,9 +64,9 @@ public class RowConfiguration {
         return new DefaultEndpointProvider(endpointRepository);
     }
 
-    @Bean
+    @Bean("rowSessionRegistry")
     @ConditionalOnMissingBean({RowSessionRegistry.class})
-    public RowSessionRegistry sessionRegistry(){
+    public RowSessionRegistry rowSessionRegistry(){
         if(handlerProperties.isAllowMultipleSessionsForSingleUser()){
             return new RowSessionRegistry.MultiUserSessionRegistry();
         }
@@ -127,9 +128,9 @@ public class RowConfiguration {
 
 
     @Bean("rowWebSocketHandler")
-    @DependsOn({"sessionRegistry", "rowFilterChain", "rowWsListener", "subscriptionRegistry"})
-    public RowWebSocketHandler rowWebSocketHandler(RowSessionRegistry sessionRegistry, RowFilterChain rowFilterChain, RowWsListener rowWsListener, SubscriptionRegistry subscriptionRegistry){
-        return new RowWebSocketHandler(sessionRegistry, webSocketProperties, rowFilterChain, rowWsListener, subscriptionRegistry, handlerProperties.isTrackHeartbeats());
+    @DependsOn({"rowSessionRegistry", "rowFilterChain", "rowWsListener", "subscriptionRegistry"})
+    public RowWebSocketHandler rowWebSocketHandler(RowSessionRegistry rowSessionRegistry, RowFilterChain rowFilterChain, RowWsListener rowWsListener, SubscriptionRegistry subscriptionRegistry){
+        return new RowWebSocketHandler(rowSessionRegistry, webSocketProperties, rowFilterChain, rowWsListener, subscriptionRegistry, handlerProperties.isTrackHeartbeats());
     }
 
     @Bean("subscriptionRegistry")
@@ -173,6 +174,19 @@ public class RowConfiguration {
     @DependsOn("objectMapper")
     public RawMessagePublisherService rawMessagePublisherService(ObjectMapper objectMapper){
         return new RawMessagePublisherService(objectMapper);
+    }
+
+    //publisher proxy config
+    @Bean
+    @ConditionalOnMissingBean(EventPublisherProxy.class)
+    @DependsOn(value = {"rowTaskExecutor","publisherService"})
+    public EventPublisherProxy publisherProxy(TaskExecutor rowTaskExecutor, PublisherService publisherService) {
+        return new EventPublisherProxy(rowTaskExecutor, publisherService);
+    }
+
+    @Bean(name = "publisherProxyBeanFactory")
+    public PublisherProxyBeanFactory webServiceProxyBeanFactory() {
+        return new PublisherProxyBeanFactory();
     }
 
 }
