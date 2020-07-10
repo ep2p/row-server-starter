@@ -18,7 +18,7 @@ A demo of this project is available [here](https://github.com/psychogen-labs/row
 - [X] Add support for spring security and `@PreAuthorize` annotations
 - [X] Create row context so current user information is accessible
 - [X] Add annotation support to register filters more easily
-- [ ] **Add publisher and subscriber structure**
+- [X] Add publisher and subscriber structure
 - [X] Add a way to set order for filters
 - [ ] Add trace logs
 - [X] Session heartbeat tracking
