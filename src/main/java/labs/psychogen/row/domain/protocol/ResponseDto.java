@@ -15,7 +15,7 @@ public class ResponseDto {
     private String requestId;
     private Object body;
     private int status;
-    private Map<String, String> header;
+    private Map<String, String> headers;
 
     public void setStatus(RowResponseStatus status) {
         this.status = status.getId();

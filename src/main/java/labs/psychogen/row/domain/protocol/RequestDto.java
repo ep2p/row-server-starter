@@ -22,6 +22,6 @@ public class RequestDto {
     private String address;
     private JsonNode query;
     private JsonNode body;
-    private Map<String, String> header;
+    private Map<String, String> headers;
     private Double version = 1.0;
 }

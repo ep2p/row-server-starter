@@ -15,7 +15,6 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString
 public class RowEndpoint {
     private Object bean;
@@ -25,22 +24,15 @@ public class RowEndpoint {
     private Class produces;
     private Class query;
     private Class body;
-    @Builder.Default
     private String prefix = "";
-    @Builder.Default
     private int bodyIndex = -1;
-    @Builder.Default
     private int queryIndex = -1;
-    @Builder.Default
     private Map<String, Integer> pathVariables = new HashMap<>();
-    @Builder.Default
     private int parametersCount = 0;
     private String finalAddress;
     private PostSubscribe postSubscribe;
     private PreSubscribe preSubscribe;
-    @Builder.Default
     private int requestIndex = -1;
-    @Builder.Default
     private int responseIndex = -1;
     private UnSubscribe unSubscribe;
 
