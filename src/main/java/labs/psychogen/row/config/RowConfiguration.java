@@ -144,9 +144,9 @@ public class RowConfiguration {
     }
 
     @Bean("publisherService")
-    @DependsOn({"subscriptionRegistry", "rowSessionRegistry"})
-    public PublisherService publisherService(SubscriptionRegistry subscriptionRegistry, RowSessionRegistry rowSessionRegistry){
-        return new PublisherService(subscriptionRegistry, rowSessionRegistry);
+    @DependsOn({"subscriptionRegistry", "rowSessionRegistry", "objectMapper"})
+    public PublisherService publisherService(SubscriptionRegistry subscriptionRegistry, RowSessionRegistry rowSessionRegistry, ObjectMapper objectMapper){
+        return new PublisherService(subscriptionRegistry, rowSessionRegistry, objectMapper);
     }
 
     @Bean("rowTaskExecutor")
@@ -167,6 +167,12 @@ public class RowConfiguration {
     @ConditionalOnMissingBean(ObjectMapper.class)
     public ObjectMapper objectMapper(){
         return new ObjectMapper();
+    }
+
+    @Bean("rawMessagePublisherService")
+    @DependsOn("objectMapper")
+    public RawMessagePublisherService rawMessagePublisherService(ObjectMapper objectMapper){
+        return new RawMessagePublisherService(objectMapper);
     }
 
 }
