@@ -100,6 +100,6 @@ public class SubscriberService {
 
     private String subscriptionIdGenerator(String event, String userId, String sessionId){
         String id = event + "." + userId + "." + sessionId;
-        return Base64.getEncoder().encodeToString(id.getBytes());
+        return Base64.getEncoder().encodeToString(id.getBytes()).substring(0, Math.min(id.length(), 10));
     }
 }
