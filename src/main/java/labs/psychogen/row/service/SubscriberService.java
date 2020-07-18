@@ -95,7 +95,6 @@ public class SubscriberService {
         UnSubscribe unSubscribe = matchingEndpoint.getUnSubscribe();
         if(unSubscribe == null)
             return;
-        RowUser rowUser = RowContextHolder.getContext().getRowUser();
         subscriptionRegistry.unsubscribe(unSubscribe.value(), RequestResponseUtil.getHeaderValue(SUBSCRIPTION_Id_HEADER_NAME, requestDto));
     }
 
