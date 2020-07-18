@@ -1,7 +1,9 @@
 package labs.psychogen.row.domain.protocol;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

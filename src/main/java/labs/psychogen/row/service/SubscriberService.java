@@ -14,8 +14,6 @@ import labs.psychogen.row.repository.SubscriptionRegistry;
 import labs.psychogen.row.utl.RequestResponseUtil;
 import org.springframework.util.DigestUtils;
 
-import java.util.Base64;
-
 import static labs.psychogen.row.config.Naming.SUBSCRIPTION_Id_HEADER_NAME;
 
 public class SubscriberService {

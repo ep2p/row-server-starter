@@ -1,11 +1,10 @@
 package labs.psychogen.row.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import labs.psychogen.row.event.EventPublisherProxy;
-import labs.psychogen.row.filter.*;
 import labs.psychogen.row.config.properties.HandlerProperties;
 import labs.psychogen.row.config.properties.RowProperties;
 import labs.psychogen.row.config.properties.WebSocketProperties;
+import labs.psychogen.row.filter.*;
 import labs.psychogen.row.repository.EndpointRepository;
 import labs.psychogen.row.repository.RowSessionRegistry;
 import labs.psychogen.row.repository.SetEndpointRepository;

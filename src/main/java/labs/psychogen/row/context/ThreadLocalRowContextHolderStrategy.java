@@ -12,7 +12,7 @@ public class ThreadLocalRowContextHolderStrategy implements RowContextHolderStra
 
     @Override
     public RowContext getContext() {
-        RowContext ctx = (RowContext) contextHolder.get();
+        RowContext ctx = contextHolder.get();
         if (ctx == null) {
             ctx = this.createEmptyContext();
             contextHolder.set(ctx);
