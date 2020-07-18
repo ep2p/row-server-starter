@@ -12,6 +12,7 @@ import labs.psychogen.row.event.Subscription;
 import labs.psychogen.row.exception.InvalidPathException;
 import labs.psychogen.row.repository.SubscriptionRegistry;
 import labs.psychogen.row.utl.RequestResponseUtil;
+import org.springframework.util.DigestUtils;
 
 import java.util.Base64;
 
@@ -98,8 +99,8 @@ public class SubscriberService {
         subscriptionRegistry.unsubscribe(unSubscribe.value(), RequestResponseUtil.getHeaderValue(SUBSCRIPTION_Id_HEADER_NAME, requestDto));
     }
 
-    private String subscriptionIdGenerator(String event, String userId, String sessionId){
+    private static String subscriptionIdGenerator(String event, String userId, String sessionId){
         String id = event + "." + userId + "." + sessionId;
-        return Base64.getEncoder().encodeToString(id.getBytes()).substring(0, Math.min(id.length(), 10));
+        return DigestUtils.md5DigestAsHex(id.getBytes()).substring(0, Math.min(id.length(), 10));
     }
 }
