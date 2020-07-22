@@ -92,13 +92,14 @@ public class SubscriberService {
 
     public void handleUnsubscribe(RequestDto requestDto, boolean pre) throws InvalidPathException {
         RowEndpoint matchingEndpoint = endpointProvider.getMatchingEndpoint(RowEndpoint.RowMethod.valueOf(requestDto.getMethod()), requestDto.getAddress());
-        String event = "";
-        if(pre){
+        String event = null;
+        if(pre && matchingEndpoint.getPreSubscribe() != null){
             event = matchingEndpoint.getPreSubscribe().value();
-        }else {
+        }else if(matchingEndpoint.getPostSubscribe() != null){
             event = matchingEndpoint.getPostSubscribe().value();
         }
-        subscriptionRegistry.unsubscribe(event, RequestResponseUtil.getHeaderValue(SUBSCRIPTION_Id_HEADER_NAME, requestDto));
+        if(event != null)
+            subscriptionRegistry.unsubscribe(event, RequestResponseUtil.getHeaderValue(SUBSCRIPTION_Id_HEADER_NAME, requestDto));
     }
 
     private static String subscriptionIdGenerator(String event, String userId, String sessionId){

@@ -25,7 +25,7 @@ public class SubscribeFilter implements RowFilter {
     @Override
     public boolean filter(RequestDto requestDto, ResponseDto responseDto, WebSocketSession webSocketSession) throws Exception {
         try {
-            if(requestDto.getHeaders().containsKey(Naming.UNSUBSCRIBE_HEADER_NAME)){
+            if(requestDto.getHeaders() != null && requestDto.getHeaders().containsKey(Naming.UNSUBSCRIBE_HEADER_NAME)){
                 String value = requestDto.getHeaders().get(Naming.UNSUBSCRIBE_HEADER_NAME);
                 if(value.equals("1")){
                     subscriberService.handleUnsubscribe(requestDto, pre);
