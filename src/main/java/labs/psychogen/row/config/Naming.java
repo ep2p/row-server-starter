@@ -6,4 +6,5 @@ public interface Naming {
     String IN_HEARTBEAT_ATTRIBUTE_NAME = "heartBeat";
     String SUBSCRIPTION_EVENT_HEADER_NAME = "row-subs-event";
     String SUBSCRIPTION_Id_HEADER_NAME = "row-subs-id";
+    String UNSUBSCRIBE_HEADER_NAME = "row-unsubscribe";
 }

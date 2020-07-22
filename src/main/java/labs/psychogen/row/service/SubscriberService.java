@@ -3,7 +3,6 @@ package labs.psychogen.row.service;
 import labs.psychogen.row.RowEndpoint;
 import labs.psychogen.row.annotations.PostSubscribe;
 import labs.psychogen.row.annotations.PreSubscribe;
-import labs.psychogen.row.annotations.UnSubscribe;
 import labs.psychogen.row.context.RowContextHolder;
 import labs.psychogen.row.context.RowUser;
 import labs.psychogen.row.domain.protocol.RequestDto;
@@ -88,12 +87,15 @@ public class SubscriberService {
         return subscription;
     }
 
-    public void handleUnsubscribe(RequestDto requestDto) throws InvalidPathException {
+    public void handleUnsubscribe(RequestDto requestDto, boolean pre) throws InvalidPathException {
         RowEndpoint matchingEndpoint = endpointProvider.getMatchingEndpoint(RowEndpoint.RowMethod.valueOf(requestDto.getMethod()), requestDto.getAddress());
-        UnSubscribe unSubscribe = matchingEndpoint.getUnSubscribe();
-        if(unSubscribe == null)
-            return;
-        subscriptionRegistry.unsubscribe(unSubscribe.value(), RequestResponseUtil.getHeaderValue(SUBSCRIPTION_Id_HEADER_NAME, requestDto));
+        String event = "";
+        if(pre){
+            event = matchingEndpoint.getPreSubscribe().value();
+        }else {
+            event = matchingEndpoint.getPostSubscribe().value();
+        }
+        subscriptionRegistry.unsubscribe(event, RequestResponseUtil.getHeaderValue(SUBSCRIPTION_Id_HEADER_NAME, requestDto));
     }
 
     private static String subscriptionIdGenerator(String event, String userId, String sessionId){

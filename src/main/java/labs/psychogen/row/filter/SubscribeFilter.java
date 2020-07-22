@@ -1,5 +1,6 @@
 package labs.psychogen.row.filter;
 
+import labs.psychogen.row.config.Naming;
 import labs.psychogen.row.domain.RowResponseStatus;
 import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.domain.protocol.ResponseDto;
@@ -24,10 +25,17 @@ public class SubscribeFilter implements RowFilter {
     @Override
     public boolean filter(RequestDto requestDto, ResponseDto responseDto, WebSocketSession webSocketSession) throws Exception {
         try {
-            Subscription subscription = subscriberService.handleSubscription(requestDto, pre);
-            if(subscription != null){
-                RequestResponseUtil.addHeader(SUBSCRIPTION_EVENT_HEADER_NAME, subscription.event(), responseDto);
-                RequestResponseUtil.addHeader(SUBSCRIPTION_Id_HEADER_NAME, subscription.id(), responseDto);
+            if(requestDto.getHeaders().containsKey(Naming.UNSUBSCRIBE_HEADER_NAME)){
+                String value = requestDto.getHeaders().get(Naming.UNSUBSCRIBE_HEADER_NAME);
+                if(value.equals("1")){
+                    subscriberService.handleUnsubscribe(requestDto, pre);
+                }
+            }else{
+                Subscription subscription = subscriberService.handleSubscription(requestDto, pre);
+                if(subscription != null){
+                    RequestResponseUtil.addHeader(SUBSCRIPTION_EVENT_HEADER_NAME, subscription.event(), responseDto);
+                    RequestResponseUtil.addHeader(SUBSCRIPTION_Id_HEADER_NAME, subscription.id(), responseDto);
+                }
             }
         } catch (InvalidPathException e){
             responseDto.setStatus(RowResponseStatus.NOT_FOUND);

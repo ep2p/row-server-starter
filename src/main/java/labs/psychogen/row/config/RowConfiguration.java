@@ -107,7 +107,6 @@ public class RowConfiguration {
     public RowFilterChain rowFilterChain(RowFilter rowInvokerFilter, SubscriberService subscriberService){
         List<RowFilter> rowFilters = new CopyOnWriteArrayList<>();
         rowFilters.add(new SubscribeFilter(subscriberService, true));
-        rowFilters.add(new UnSubscribeFilter(subscriberService));
         rowFilters.add(rowInvokerFilter);
         rowFilters.add(new SubscribeFilter(subscriberService, false));
         return new RowFilterChain(rowFilters);
