@@ -2,11 +2,13 @@ package labs.psychogen.row.filter;
 
 import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.domain.protocol.ResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.List;
 
+@Slf4j
 public class RowFilterChain {
     private List<RowFilter> filters;
 
@@ -34,6 +36,7 @@ public class RowFilterChain {
             if(filter.getClass().equals(before)){
                 int i = filters.indexOf(filter);
                 filters.add( i, rowFilter);
+                log.info("added filter " + rowFilter + " before "+ before);
                 return;
             }
         }
@@ -44,6 +47,7 @@ public class RowFilterChain {
             if(filter.getClass().equals(after)){
                 int i = filters.indexOf(filter);
                 filters.add( i+1, rowFilter);
+                log.info("added filter " + rowFilter + " after "+ after);
                 return;
             }
         }

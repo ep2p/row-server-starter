@@ -11,7 +11,7 @@ import labs.psychogen.row.domain.RowResponseStatus;
 import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.domain.protocol.ResponseDto;
 import labs.psychogen.row.filter.RowFilterChain;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -21,7 +21,7 @@ import javax.validation.Validator;
 import java.io.IOException;
 import java.util.Set;
 
-@Log4j2
+@Slf4j
 public class ProtocolService {
     private final RowFilterChain rowFilterChain;
     private final ObjectMapper objectMapper;
@@ -35,7 +35,7 @@ public class ProtocolService {
     }
 
     public void handle(WebSocketSession webSocketSession, TextMessage textMessage){
-        log.trace("received message: " + textMessage.getPayload());
+        log.trace("Received message: " + textMessage.getPayload());
         String payload = textMessage.getPayload();
         fillContext(webSocketSession);
         ResponseDto responseDto = ResponseDto.builder().status(RowResponseStatus.OK.getId()).build();
@@ -58,17 +58,18 @@ public class ProtocolService {
                     .status(RowResponseStatus.OTHER.getId())
                     .requestId(requestId)
                     .build();
-            log.catching(e);
+            log.error("Json Error", e);
         } catch (Exception e) {
             responseDto.setStatus(RowResponseStatus.INTERNAL_SERVER_ERROR);
-            log.catching(e);
+            log.error("Exception thrown while handling message", e);
         }
 
         try {
             String responsePayload = objectMapper.writeValueAsString(responseDto);
+            log.trace("Sending response: "+ responsePayload);
             webSocketSession.sendMessage(new TextMessage(responsePayload));
         } catch (IOException e) {
-            log.catching(e);
+            log.error("Failed to publish response to websocket", e);
         }
     }
 

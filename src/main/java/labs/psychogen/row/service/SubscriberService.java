@@ -11,10 +11,12 @@ import labs.psychogen.row.event.Subscription;
 import labs.psychogen.row.exception.InvalidPathException;
 import labs.psychogen.row.repository.SubscriptionRegistry;
 import labs.psychogen.row.utl.RequestResponseUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.DigestUtils;
 
 import static labs.psychogen.row.config.Naming.SUBSCRIPTION_Id_HEADER_NAME;
 
+@Slf4j
 public class SubscriberService {
     private final SubscriptionRegistry subscriptionRegistry;
     private final EndpointProvider endpointProvider;
@@ -64,6 +66,7 @@ public class SubscriberService {
             }
         };
         if (subscriptionRegistry.addSubscription(subscription)) {
+            log.debug("New subscription added for "+ subscription.event() + " with info: " + subscription.info());
             return subscription;
         }
         return null;

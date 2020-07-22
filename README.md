@@ -20,7 +20,7 @@ A demo of this project is available [here](https://github.com/psychogen-labs/row
 - [X] Add annotation support to register filters more easily
 - [X] Add publisher and subscriber structure
 - [X] Add a way to set order for filters
-- [ ] Add trace logs
+- [X] Add logs
 - [X] Session heartbeat tracking
 - [X] Pass request response to controller
 - [X] Add request and response Headers

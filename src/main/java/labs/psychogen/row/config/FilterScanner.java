@@ -3,12 +3,14 @@ package labs.psychogen.row.config;
 import labs.psychogen.row.annotations.Filter;
 import labs.psychogen.row.filter.RowFilter;
 import labs.psychogen.row.filter.RowFilterChain;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class FilterScanner {
     private final RowFilterChain rowFilterChain;
     private volatile boolean init = false;
@@ -21,10 +23,12 @@ public class FilterScanner {
     public void init(ApplicationContext applicationContext){
         if(init)
             return;
+        log.info("Scanning row filters");
         Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(Filter.class);
         beansWithAnnotation.forEach((beanName, bean) -> {
             processBean(bean);
         });
+        log.info("Finished scanning row filters");
         init = true;
     }
 

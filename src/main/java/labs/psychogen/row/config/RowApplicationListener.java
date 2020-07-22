@@ -1,8 +1,10 @@
 package labs.psychogen.row.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+@Slf4j
 public class RowApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
     private final RowScanner rowScanner;
     private final FilterScanner filterScanner;
@@ -14,6 +16,7 @@ public class RowApplicationListener implements ApplicationListener<ContextRefres
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        log.trace("RowApplicationListener event fired. Initializing.");
         rowScanner.init(contextRefreshedEvent.getApplicationContext());
         filterScanner.init(contextRefreshedEvent.getApplicationContext());
     }

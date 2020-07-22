@@ -5,6 +5,7 @@ import labs.psychogen.row.annotations.*;
 import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.domain.protocol.ResponseDto;
 import labs.psychogen.row.repository.EndpointRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class RowScanner {
     private final EndpointRepository endpointRepository;
 
@@ -33,6 +35,7 @@ public class RowScanner {
         if(AopUtils.isAopProxy(bean)){
             handleBean(bean, AopUtils.getTargetClass(bean));
         }
+        log.info("Registered all scanned endpoints");
     }
 
     //todo: create bean handler pipeline

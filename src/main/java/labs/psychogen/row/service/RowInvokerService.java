@@ -6,6 +6,7 @@ import labs.psychogen.row.RowEndpoint;
 import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.domain.protocol.ResponseDto;
 import labs.psychogen.row.exception.InvalidPathException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
