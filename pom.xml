@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>labs.psychogen</groupId>
 	<artifactId>springboot-row-starter</artifactId>
-	<version>1.2.1-RELEASE</version>
+	<version>1.2.2-RELEASE</version>
 	<name>Springboot Rest Over Websocket Starter</name>
 	<description>Spring boot starter for Rest Over Websocket</description>
 	<developers>
