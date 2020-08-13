@@ -18,9 +18,8 @@ public interface PublishStrategy {
 
             @Override
             public void publish(String json, RowWebsocketSession rowWebsocketSession, Subscription subscription) throws IOException {
-                WebSocketSession session = rowWebsocketSession.getSession();
-                if(subscription.info().getSessionId().equals(session.getId())){
-                    session.sendMessage(new TextMessage(json));
+                if(subscription.info().getSessionId().equals(rowWebsocketSession.getSession().getId())){
+                    rowWebsocketSession.getSession().sendMessage(new TextMessage(json));
                 }
             }
         }),
@@ -32,8 +31,7 @@ public interface PublishStrategy {
 
             @Override
             public void publish(String json, RowWebsocketSession rowWebsocketSession, Subscription subscription) throws IOException {
-                WebSocketSession session = rowWebsocketSession.getSession();
-                session.sendMessage(new TextMessage(json));
+                rowWebsocketSession.getSession().sendMessage(new TextMessage(json));
             }
         });
 
