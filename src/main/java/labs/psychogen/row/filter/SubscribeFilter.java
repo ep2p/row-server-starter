@@ -2,6 +2,7 @@ package labs.psychogen.row.filter;
 
 import labs.psychogen.row.config.Naming;
 import labs.psychogen.row.domain.RowResponseStatus;
+import labs.psychogen.row.domain.RowWebsocketSession;
 import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.domain.protocol.ResponseDto;
 import labs.psychogen.row.event.Subscription;
@@ -23,7 +24,7 @@ public class SubscribeFilter implements RowFilter {
     }
 
     @Override
-    public boolean filter(RequestDto requestDto, ResponseDto responseDto, WebSocketSession webSocketSession) throws Exception {
+    public boolean filter(RequestDto requestDto, ResponseDto responseDto, RowWebsocketSession rowWebsocketSession) throws Exception {
         try {
             if(requestDto.getHeaders() != null && requestDto.getHeaders().containsKey(Naming.UNSUBSCRIBE_HEADER_NAME)){
                 String value = requestDto.getHeaders().get(Naming.UNSUBSCRIBE_HEADER_NAME);

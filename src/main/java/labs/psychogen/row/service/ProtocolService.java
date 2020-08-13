@@ -8,6 +8,7 @@ import labs.psychogen.row.context.DefaultContextImpl;
 import labs.psychogen.row.context.RowContextHolder;
 import labs.psychogen.row.context.RowUser;
 import labs.psychogen.row.domain.RowResponseStatus;
+import labs.psychogen.row.domain.RowWebsocketSession;
 import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.domain.protocol.ResponseDto;
 import labs.psychogen.row.filter.RowFilterChain;
@@ -34,10 +35,10 @@ public class ProtocolService {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
-    public void handle(WebSocketSession webSocketSession, TextMessage textMessage){
+    public void handle(RowWebsocketSession webSocketSession, TextMessage textMessage){
         log.trace("Received message: " + textMessage.getPayload());
         String payload = textMessage.getPayload();
-        fillContext(webSocketSession);
+        fillContext(webSocketSession.getSession());
         ResponseDto responseDto = ResponseDto.builder().status(RowResponseStatus.OK.getId()).build();
         String requestId = null;
         try {
@@ -67,7 +68,7 @@ public class ProtocolService {
         try {
             String responsePayload = objectMapper.writeValueAsString(responseDto);
             log.trace("Sending response: "+ responsePayload);
-            webSocketSession.sendMessage(new TextMessage(responsePayload));
+            webSocketSession.getSession().sendMessage(new TextMessage(responsePayload));
         } catch (IOException e) {
             log.error("Failed to publish response to websocket", e);
         }

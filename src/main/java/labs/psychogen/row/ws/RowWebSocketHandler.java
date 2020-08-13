@@ -49,7 +49,7 @@ public class RowWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        protocolService.handle(session, message);
+        protocolService.handle(rowSessionRegistry.getSession(WebsocketSessionUtil.getUserId(session), session.getId()), message);
         updateHeartbeat(session);
     }
 

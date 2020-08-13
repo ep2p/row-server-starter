@@ -1,5 +1,6 @@
 package labs.psychogen.row.filter;
 
+import labs.psychogen.row.domain.RowWebsocketSession;
 import labs.psychogen.row.domain.protocol.RequestDto;
 import labs.psychogen.row.domain.protocol.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
@@ -53,9 +54,9 @@ public class RowFilterChain {
         }
     }
 
-    public void filter(RequestDto requestDto, ResponseDto response, WebSocketSession session) throws Exception {
+    public void filter(RequestDto requestDto, ResponseDto response, RowWebsocketSession rowWebsocketSession) throws Exception {
         for (RowFilter filter : filters) {
-            if (!filter.filter(requestDto, response, session)) {
+            if (!filter.filter(requestDto, response, rowWebsocketSession)) {
                 return;
             }
         }
