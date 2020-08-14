@@ -10,7 +10,7 @@ As the name suggests, ROW creates a websocket endpoint and provides json based p
 Everything you need to know is covered in [wiki pages](https://github.com/psychogen-labs/spring-rest-over-ws/wiki).
 
 ## Demo
-A demo of this project is available [here](https://github.com/psychogen-labs/row-demo).
+A demo of this project is available [here](https://github.com/psychogen-labs/row-demo). This demo uses [Java Row Client](https://github.com/psychogen-labs/java-row-client) as client to contact row server.
 
 ## TODO
 
