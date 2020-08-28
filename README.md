@@ -7,10 +7,10 @@ ROW (Rest Over Websocket) | Spring boot websocket that wrapps rest apis
 As the name suggests, ROW creates a websocket endpoint and provides json based protocol that wraps springboot rest controllers. Therefore, with a simple configuration and some annotations, your application will be served on websocket alongside already defined http endpoints.
 
 ## Documentations
-Everything you need to know is covered in [wiki pages](https://github.com/psychogen-labs/spring-rest-over-ws/wiki).
+Everything you need to know is covered in [wiki pages](https://github.com/idioglossia/spring-rest-over-ws/wiki).
 
 ## Demo
-A demo of this project is available [here](https://github.com/psychogen-labs/row-demo). This demo uses [Java Row Client](https://github.com/psychogen-labs/java-row-client) as client to contact row server.
+A demo of this project is available [here](https://github.com/idioglossia/row-demo). This demo uses [Java Row Client](https://github.com/idioglossia/java-row-client) as client to contact row server.
 
 ## TODO
 
@@ -24,4 +24,5 @@ A demo of this project is available [here](https://github.com/psychogen-labs/row
 - [X] Session heartbeat tracking
 - [X] Pass request response to controller
 - [X] Add request and response Headers
+- [ ] Update package names to new organization name
 - [ ] Change to develop branch for next development processes
