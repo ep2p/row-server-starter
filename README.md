@@ -24,5 +24,5 @@ A demo of this project is available [here](https://github.com/idioglossia/row-de
 - [X] Session heartbeat tracking
 - [X] Pass request response to controller
 - [X] Add request and response Headers
-- [ ] Update package names to new organization name
+- [X] Update package names to new organization name
 - [ ] Change to develop branch for next development processes

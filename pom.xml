@@ -8,9 +8,9 @@
 		<version>2.2.7.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>labs.psychogen</groupId>
+	<groupId>lab.idioglossia</groupId>
 	<artifactId>springboot-row-starter</artifactId>
-	<version>1.2.3-RELEASE</version>
+	<version>1.3.0-RELEASE</version>
 	<name>Springboot Rest Over Websocket Starter</name>
 	<description>Spring boot starter for Rest Over Websocket</description>
 	<developers>
