@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/psychogen-labs/spring-rest-over-ws.svg)](https://jitpack.io/#psychogen-labs/spring-rest-over-ws)
+[![](https://jitpack.io/v/idioglossia/spring-rest-over-ws.svg)](https://jitpack.io/#idioglossia/spring-rest-over-ws)
 
 # Rest Over Websocket | Springboot starter
 ROW (Rest Over Websocket) | Spring boot websocket that wrapps rest apis
