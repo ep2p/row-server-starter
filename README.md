@@ -16,3 +16,4 @@ A demo of this project is available [here](https://github.com/idioglossia/row-de
 
 - [ ] Added handler pipeline for row scanner (cleaner code)
 - [ ] Added application events for row configurations
+- [ ] Customizable error handler
