@@ -77,7 +77,7 @@ public class ProtocolService {
     private void fillContext(WebSocketSession webSocketSession) {
         RowContextHolder.setContext(
                 new DefaultContextImpl(
-                        new RowUser((String) webSocketSession.getAttributes().get(Naming.USER_ID_ATTRIBUTE_NAME), webSocketSession.getId())
+                        new RowUser((String) webSocketSession.getAttributes().get(Naming.USER_ID_ATTRIBUTE_NAME), webSocketSession.getId()), true
                 )
         );
     }

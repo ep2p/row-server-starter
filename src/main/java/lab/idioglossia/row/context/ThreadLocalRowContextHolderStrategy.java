@@ -29,6 +29,6 @@ public class ThreadLocalRowContextHolderStrategy implements RowContextHolderStra
 
     @Override
     public RowContext createEmptyContext() {
-        return new DefaultContextImpl(new RowUser());
+        return new DefaultContextImpl(new RowUser(), false);
     }
 }

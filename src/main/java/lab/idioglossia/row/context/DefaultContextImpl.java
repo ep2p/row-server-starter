@@ -2,15 +2,17 @@ package lab.idioglossia.row.context;
 
 public class DefaultContextImpl implements RowContext {
     private volatile RowUser rowUser;
+    private final boolean rowRequest;
     private static final long serialVersionUID = 100L;
 
-    public DefaultContextImpl(RowUser rowUser) {
+    public DefaultContextImpl(RowUser rowUser, boolean isRowRequest) {
         this.rowUser = rowUser;
+        this.rowRequest = isRowRequest;
     }
 
     @Override
     public boolean isRowRequest() {
-        return true;
+        return this.rowRequest;
     }
 
     @Override
