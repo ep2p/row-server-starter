@@ -27,12 +27,12 @@ public class RowScanner {
     public void init(ApplicationContext applicationContext){
         Map<String, Object> allBeansWithNames = applicationContext.getBeansWithAnnotation(RowController.class);
         allBeansWithNames.forEach((beanName, bean) -> {
-            processBean(bean, true);
+            processProxyBean(bean, true);
         });
         log.info("Registered all scanned endpoints");
     }
 
-    public void processBean(Object bean, boolean checkAnnotation){
+    public void processProxyBean(Object bean, boolean checkAnnotation){
         if(AopUtils.isAopProxy(bean)){
             Class<?> aClass = AopUtils.getTargetClass(bean);
             if (checkAnnotation && aClass.getAnnotation(RowController.class) == null) {
@@ -42,9 +42,16 @@ public class RowScanner {
         }
     }
 
+    public void processBean(Object bean, Class aClass){
+        handleBean(bean, aClass);
+    }
+
     //todo: create bean handler pipeline
     private void handleBean(Object bean, Class<?> aClass) {
-        String prefix = aClass.getAnnotation(RowController.class).value();
+        String prefix = "";
+        RowController rowControllerAnnotation = aClass.getAnnotation(RowController.class);
+        if(rowControllerAnnotation != null)
+            prefix = rowControllerAnnotation.value();
 
         for (Method method : aClass.getMethods()) {
             RowIgnore ignore = method.getAnnotation(RowIgnore.class);
