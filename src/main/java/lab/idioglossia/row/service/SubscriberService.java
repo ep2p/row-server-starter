@@ -6,6 +6,7 @@ import lab.idioglossia.row.annotations.PreSubscribe;
 import lab.idioglossia.row.context.RowContextHolder;
 import lab.idioglossia.row.context.RowUser;
 import lab.idioglossia.row.domain.protocol.RequestDto;
+import lab.idioglossia.row.domain.protocol.ResponseDto;
 import lab.idioglossia.row.event.PublishStrategy;
 import lab.idioglossia.row.event.Subscription;
 import lab.idioglossia.row.exception.InvalidPathException;
@@ -24,6 +25,16 @@ public class SubscriberService {
     public SubscriberService(SubscriptionRegistry subscriptionRegistry, EndpointProvider endpointProvider) {
         this.subscriptionRegistry = subscriptionRegistry;
         this.endpointProvider = endpointProvider;
+    }
+
+    public final Subscription subscribe(String event, PublishStrategy strategy, RowUser rowUser, ResponseDto responseDto){
+        Subscription subscription = subscribe(event, strategy, rowUser);
+        RequestResponseUtil.addSubscriptionDetails(subscription, responseDto);
+        return subscription;
+    }
+
+    public final Subscription subscribe(String event, PublishStrategy strategy, RowUser rowUser){
+        return subscribe(event, strategy, rowUser.getUserId(), rowUser.getSessionId());
     }
 
     public final Subscription subscribe(String event, PublishStrategy strategy, String userId, String sessionId){
@@ -99,7 +110,11 @@ public class SubscriberService {
             event = matchingEndpoint.getPostSubscribe().value();
         }
         if(event != null)
-            subscriptionRegistry.unsubscribe(event, RequestResponseUtil.getHeaderValue(SUBSCRIPTION_Id_HEADER_NAME, requestDto));
+            unsubscribe(event, requestDto);
+    }
+
+    public void unsubscribe(String event, RequestDto requestDto) {
+        subscriptionRegistry.unsubscribe(event, RequestResponseUtil.getHeaderValue(SUBSCRIPTION_Id_HEADER_NAME, requestDto));
     }
 
     private static String subscriptionIdGenerator(String event, String userId, String sessionId){

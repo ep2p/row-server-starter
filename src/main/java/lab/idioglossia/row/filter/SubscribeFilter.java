@@ -25,16 +25,12 @@ public class SubscribeFilter implements RowFilter {
     @Override
     public boolean filter(RequestDto requestDto, ResponseDto responseDto, RowWebsocketSession rowWebsocketSession) throws Exception {
         try {
-            if(requestDto.getHeaders() != null && requestDto.getHeaders().containsKey(Naming.UNSUBSCRIBE_HEADER_NAME)){
-                String value = requestDto.getHeaders().get(Naming.UNSUBSCRIBE_HEADER_NAME);
-                if(value.equals("1")){
-                    subscriberService.handleUnsubscribe(requestDto, pre);
-                }
-            }else{
+            if(RequestResponseUtil.isUnSubscribing(requestDto)){
+                subscriberService.handleUnsubscribe(requestDto, pre);
+            } else{
                 Subscription subscription = subscriberService.handleSubscription(requestDto, pre);
                 if(subscription != null){
-                    RequestResponseUtil.addHeader(SUBSCRIPTION_EVENT_HEADER_NAME, subscription.event(), responseDto);
-                    RequestResponseUtil.addHeader(SUBSCRIPTION_Id_HEADER_NAME, subscription.id(), responseDto);
+                    RequestResponseUtil.addSubscriptionDetails(subscription, responseDto);
                 }
             }
         } catch (InvalidPathException e){
