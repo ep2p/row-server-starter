@@ -1,6 +1,5 @@
 package lab.idioglossia.row.filter;
 
-import lab.idioglossia.row.config.Naming;
 import lab.idioglossia.row.domain.RowResponseStatus;
 import lab.idioglossia.row.domain.RowWebsocketSession;
 import lab.idioglossia.row.domain.protocol.RequestDto;
@@ -9,9 +8,6 @@ import lab.idioglossia.row.event.Subscription;
 import lab.idioglossia.row.exception.InvalidPathException;
 import lab.idioglossia.row.service.SubscriberService;
 import lab.idioglossia.row.utl.RequestResponseUtil;
-
-import static lab.idioglossia.row.config.Naming.SUBSCRIPTION_EVENT_HEADER_NAME;
-import static lab.idioglossia.row.config.Naming.SUBSCRIPTION_Id_HEADER_NAME;
 
 public class SubscribeFilter implements RowFilter {
     private final SubscriberService subscriberService;
