@@ -31,7 +31,7 @@ public class RowScanner {
         });
     }
 
-    private void processBean(Object bean){
+    public void processBean(Object bean){
         if(AopUtils.isAopProxy(bean)){
             handleBean(bean, AopUtils.getTargetClass(bean));
         }
