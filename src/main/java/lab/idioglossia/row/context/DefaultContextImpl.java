@@ -9,6 +9,11 @@ public class DefaultContextImpl implements RowContext {
     }
 
     @Override
+    public boolean isRowRequest() {
+        return true;
+    }
+
+    @Override
     public RowUser getRowUser() {
         return rowUser;
     }
