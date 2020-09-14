@@ -14,15 +14,4 @@ A demo of this project is available [here](https://github.com/idioglossia/row-de
 
 ## TODO
 
-- [x] Filter chain for request handling (So developers can add their own filters)
-- [X] Add support for spring security and `@PreAuthorize` annotations
-- [X] Create row context so current user information is accessible
-- [X] Add annotation support to register filters more easily
-- [X] Add publisher and subscriber structure
-- [X] Add a way to set order for filters
-- [X] Add logs
-- [X] Session heartbeat tracking
-- [X] Pass request response to controller
-- [X] Add request and response Headers
-- [X] Update package names to new organization name
-- [ ] Change to develop branch for next development processes
+- [ ] Added handler pipeline for row scanner (cleaner code)
