@@ -3,6 +3,7 @@ package lab.idioglossia.row.service;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lab.idioglossia.row.config.Naming;
 import lab.idioglossia.row.context.DefaultContextImpl;
 import lab.idioglossia.row.context.RowContextHolder;
@@ -32,6 +33,7 @@ public class ProtocolService {
         this.rowFilterChain = rowFilterChain;
         objectMapper = new ObjectMapper();
         objectMapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
