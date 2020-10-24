@@ -26,7 +26,8 @@ public class RowHandshakeTokenInterceptor implements HandshakeInterceptor {
         try {
             WebsocketUserData websocketUserData = rowHandshakeAuthHandler.handshake(tokenExtractor.getToken(serverHttpRequest));
             attributes.put(USER_ID_ATTRIBUTE_NAME, websocketUserData.getId());
-            attributes.put(EXTRA_ATTRIBUTE_NAME, websocketUserData.getExtra());
+            if(websocketUserData.getExtra() != null)
+                attributes.put(EXTRA_ATTRIBUTE_NAME, websocketUserData.getExtra());
             return true;
         } catch (AuthenticationFailedException e){
             return false;

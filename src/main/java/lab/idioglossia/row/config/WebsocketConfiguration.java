@@ -24,13 +24,13 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 @ConditionalOnClass(RowConfiguration.class)
 @DependsOn({"rowHandshakeTokenInterceptor", "rowWebSocketHandler"})
 @ConditionalOnProperty(value = "row.ws.enable", havingValue = "true")
-public class WebsocketConfig implements WebSocketConfigurer {
+public class WebsocketConfiguration implements WebSocketConfigurer {
     private final WebSocketProperties webSocketProperties;
     private final WebSocketHandler rowWebSocketHandler;
     private final RowHandshakeTokenInterceptor rowHandshakeTokenInterceptor;
 
     @Autowired
-    public WebsocketConfig(WebSocketProperties webSocketProperties, RowWebSocketHandler rowWebSocketHandler, RowHandshakeTokenInterceptor rowHandshakeTokenInterceptor) {
+    public WebsocketConfiguration(WebSocketProperties webSocketProperties, RowWebSocketHandler rowWebSocketHandler, RowHandshakeTokenInterceptor rowHandshakeTokenInterceptor) {
         this.webSocketProperties = webSocketProperties;
         this.rowWebSocketHandler = rowWebSocketHandler;
         this.rowHandshakeTokenInterceptor = rowHandshakeTokenInterceptor;

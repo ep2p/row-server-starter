@@ -5,9 +5,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.ServerHttpRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface TokenExtractor {
     String getToken(ServerHttpRequest serverHttpRequest) throws AuthenticationFailedException;
+
+    class NoTokenExtractor implements TokenExtractor {
+        @Override
+        public String getToken(ServerHttpRequest serverHttpRequest) throws AuthenticationFailedException {
+            System.out.println("getToken() is called");
+            return UUID.randomUUID().toString();
+        }
+    }
 
     class SecWebsocketProtocolTokenExtractor implements TokenExtractor {
         @Override

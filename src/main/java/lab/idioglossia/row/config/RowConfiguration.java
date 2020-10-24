@@ -35,7 +35,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableWebSocket
 @EnableConfigurationProperties({WebSocketProperties.class, HandlerProperties.class, RowProperties.class})
 @ConditionalOnProperty(value = "row.enable", havingValue = "true")
-@Import({WebsocketConfig.class, RowApplicationListener.class})
+@Import({WebsocketConfiguration.class, RowApplicationListener.class})
 public class RowConfiguration {
     private final WebSocketProperties webSocketProperties;
     private final HandlerProperties handlerProperties;
@@ -90,7 +90,7 @@ public class RowConfiguration {
     @Bean
     @ConditionalOnMissingBean({TokenExtractor.class})
     public TokenExtractor tokenExtractor(){
-        return new TokenExtractor.SecWebsocketProtocolTokenExtractor();
+        return new TokenExtractor.NoTokenExtractor();
     }
 
     @Bean("rowHandshakeTokenInterceptor")
