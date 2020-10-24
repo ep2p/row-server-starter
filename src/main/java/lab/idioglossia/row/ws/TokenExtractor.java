@@ -13,7 +13,6 @@ public interface TokenExtractor {
     class NoTokenExtractor implements TokenExtractor {
         @Override
         public String getToken(ServerHttpRequest serverHttpRequest) throws AuthenticationFailedException {
-            System.out.println("getToken() is called");
             return UUID.randomUUID().toString();
         }
     }
