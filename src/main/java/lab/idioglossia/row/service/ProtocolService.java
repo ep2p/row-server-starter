@@ -45,6 +45,10 @@ public class ProtocolService {
         String requestId = null;
         try {
             RequestDto requestDto = objectMapper.readValue(payload, RequestDto.class);
+            //ignoring payloads that are not request type
+            if(requestDto.getType() == null || !requestDto.getType().equals("request")){
+                return;
+            }
             requestId = requestDto.getId();
             Set<ConstraintViolation<RequestDto>> constraintViolations = validator.validate(requestDto);
             if(constraintViolations.size() > 0){

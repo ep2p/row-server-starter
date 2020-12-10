@@ -16,6 +16,8 @@ public class ResponseDto {
     private Object body;
     private int status;
     private Map<String, String> headers;
+    @Builder.Default
+    private String type = "response";
 
     public void setStatus(RowResponseStatus status) {
         this.status = status.getId();
