@@ -14,8 +14,6 @@ import lab.idioglossia.row.server.repository.SetEndpointRepository;
 import lab.idioglossia.row.server.repository.SubscriptionRegistry;
 import lab.idioglossia.row.server.service.*;
 import lab.idioglossia.row.server.ws.*;
-import lab.idioglossia.row.service.*;
-import lab.idioglossia.row.ws.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

@@ -1,8 +1,7 @@
 package lab.idioglossia.row.server.config;
 
-import lab.idioglossia.row.server.domain.RowEndpoint;
-import lab.idioglossia.row.annotations.*;
 import lab.idioglossia.row.server.annotations.*;
+import lab.idioglossia.row.server.domain.RowEndpoint;
 import lab.idioglossia.row.server.domain.protocol.RequestDto;
 import lab.idioglossia.row.server.domain.protocol.ResponseDto;
 import lab.idioglossia.row.server.repository.EndpointRepository;
