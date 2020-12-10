@@ -37,7 +37,7 @@ public class ProtocolService {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
-    public void handle(RowWebsocketSession webSocketSession, TextMessage textMessage){
+    public boolean handle(RowWebsocketSession webSocketSession, TextMessage textMessage){
         log.trace("Received message: " + textMessage.getPayload());
         String payload = textMessage.getPayload();
         fillContext(webSocketSession.getSession());
@@ -47,7 +47,8 @@ public class ProtocolService {
             RequestDto requestDto = objectMapper.readValue(payload, RequestDto.class);
             //ignoring payloads that are not request type
             if(requestDto.getType() == null || !requestDto.getType().equals("request")){
-                return;
+                log.trace("Payload type was not equal to \"request\" and might be a response for reused connection");
+                return false;
             }
             requestId = requestDto.getId();
             Set<ConstraintViolation<RequestDto>> constraintViolations = validator.validate(requestDto);
@@ -78,6 +79,8 @@ public class ProtocolService {
         } catch (IOException e) {
             log.error("Failed to publish response to websocket", e);
         }
+
+        return true;
     }
 
     private void fillContext(WebSocketSession webSocketSession) {

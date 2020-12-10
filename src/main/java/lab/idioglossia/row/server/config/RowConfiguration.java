@@ -24,6 +24,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
@@ -130,7 +131,7 @@ public class RowConfiguration {
 
     @Bean("rowWebSocketHandler")
     @DependsOn({"rowSessionRegistry", "rowFilterChain", "rowWsListener", "subscriptionRegistry"})
-    public RowWebSocketHandler rowWebSocketHandler(RowSessionRegistry rowSessionRegistry, RowFilterChain rowFilterChain, RowWsListener rowWsListener, SubscriptionRegistry subscriptionRegistry){
+    public WebSocketHandler rowWebSocketHandler(RowSessionRegistry rowSessionRegistry, RowFilterChain rowFilterChain, RowWsListener rowWsListener, SubscriptionRegistry subscriptionRegistry){
         return new RowWebSocketHandler(rowSessionRegistry, webSocketProperties, rowFilterChain, rowWsListener, subscriptionRegistry, handlerProperties.isTrackHeartbeats());
     }
 
