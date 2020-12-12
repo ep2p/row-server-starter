@@ -3,7 +3,6 @@ package lab.idioglossia.row.server.ws;
 import lab.idioglossia.row.server.config.Naming;
 import lab.idioglossia.row.server.config.properties.WebSocketProperties;
 import lab.idioglossia.row.server.domain.RowWebsocketSession;
-import lab.idioglossia.row.server.filter.RowFilterChain;
 import lab.idioglossia.row.server.repository.RowSessionRegistry;
 import lab.idioglossia.row.server.repository.SubscriptionRegistry;
 import lab.idioglossia.row.server.service.ProtocolService;
@@ -20,18 +19,18 @@ import java.util.Date;
 public class RowWebSocketHandler extends TextWebSocketHandler {
     private final RowSessionRegistry rowSessionRegistry;
     private final WebSocketProperties webSocketProperties;
-    private final ProtocolService protocolService;
     private final RowWsListener rowWsListener;
     private final SubscriptionRegistry subscriptionRegistry;
+    private final ProtocolService protocolService;
     private final boolean trackHeartbeats;
 
-    public RowWebSocketHandler(RowSessionRegistry rowSessionRegistry, WebSocketProperties webSocketProperties, RowFilterChain rowFilterChain, RowWsListener rowWsListener, SubscriptionRegistry subscriptionRegistry, boolean trackHeartbeats) {
+    public RowWebSocketHandler(RowSessionRegistry rowSessionRegistry, WebSocketProperties webSocketProperties, RowWsListener rowWsListener, SubscriptionRegistry subscriptionRegistry, ProtocolService protocolService, boolean trackHeartbeats) {
         this.rowSessionRegistry = rowSessionRegistry;
         this.webSocketProperties = webSocketProperties;
         this.rowWsListener = rowWsListener;
         this.subscriptionRegistry = subscriptionRegistry;
+        this.protocolService = protocolService;
         this.trackHeartbeats = trackHeartbeats;
-        protocolService = new ProtocolService(rowFilterChain);
     }
 
     @Override
@@ -80,7 +79,7 @@ public class RowWebSocketHandler extends TextWebSocketHandler {
 
     //--------------------
 
-    private void updateHeartbeat(WebSocketSession session) {
+    public void updateHeartbeat(WebSocketSession session) {
         if(trackHeartbeats)
             session.getAttributes().put(Naming.IN_HEARTBEAT_ATTRIBUTE_NAME, new Date());
     }

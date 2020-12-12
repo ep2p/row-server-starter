@@ -128,11 +128,16 @@ public class RowConfiguration {
         return new RowWsListener.DummyRowWsListener();
     }
 
+    @Bean("protocolService")
+    @DependsOn("rowFilterChain")
+    public ProtocolService protocolService(RowFilterChain rowFilterChain){
+        return new ProtocolService(rowFilterChain);
+    }
 
     @Bean("rowWebSocketHandler")
-    @DependsOn({"rowSessionRegistry", "rowFilterChain", "rowWsListener", "subscriptionRegistry"})
-    public WebSocketHandler rowWebSocketHandler(RowSessionRegistry rowSessionRegistry, RowFilterChain rowFilterChain, RowWsListener rowWsListener, SubscriptionRegistry subscriptionRegistry){
-        return new RowWebSocketHandler(rowSessionRegistry, webSocketProperties, rowFilterChain, rowWsListener, subscriptionRegistry, handlerProperties.isTrackHeartbeats());
+    @DependsOn({"rowSessionRegistry", "protocolService", "rowWsListener", "subscriptionRegistry"})
+    public WebSocketHandler rowWebSocketHandler(RowSessionRegistry rowSessionRegistry, ProtocolService protocolService, RowWsListener rowWsListener, SubscriptionRegistry subscriptionRegistry){
+        return new RowWebSocketHandler(rowSessionRegistry, webSocketProperties, rowWsListener, subscriptionRegistry, protocolService, handlerProperties.isTrackHeartbeats());
     }
 
     @Bean("subscriptionRegistry")
