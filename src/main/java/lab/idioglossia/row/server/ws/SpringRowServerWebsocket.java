@@ -21,6 +21,7 @@ public class SpringRowServerWebsocket extends AbstractWebsocketSession<WebSocket
 
     public SpringRowServerWebsocket(WebSocketSession webSocketSession) {
         super(webSocketSession.getAttributes());
+        setNativeSession(webSocketSession);
         this.webSocketSession = webSocketSession;
     }
 
