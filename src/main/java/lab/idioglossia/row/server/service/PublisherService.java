@@ -5,11 +5,13 @@ import lab.idioglossia.row.server.domain.protocol.ResponseDto;
 import lab.idioglossia.row.server.repository.RowSessionRegistry;
 import lab.idioglossia.row.server.repository.SubscriptionRegistry;
 import lab.idioglossia.row.server.utl.RequestResponseUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
 import static lab.idioglossia.row.server.config.Naming.SUBSCRIPTION_EVENT_HEADER_NAME;
 
+@Slf4j
 public class PublisherService {
     private final SubscriptionRegistry subscriptionRegistry;
     private final RowSessionRegistry rowSessionRegistry;
@@ -28,10 +30,10 @@ public class PublisherService {
                     String json = objectMapper.writeValueAsString(getResponse(message, event));
                     subscription.info().getStrategy().publish(json, rowWebsocketSession, subscription);
                 } catch (IOException | IllegalStateException e) {
-                    if(!rowWebsocketSession.getSession().isOpen()){
+                    if(!rowWebsocketSession.isOpen()){
                         subscriptionRegistry.removeSubscription(subscription);
                     }
-                    e.printStackTrace(); //todo
+                    log.error("Failed to publish message", e); //todo: maybe throw as runtime error?
                 }
             });
         });

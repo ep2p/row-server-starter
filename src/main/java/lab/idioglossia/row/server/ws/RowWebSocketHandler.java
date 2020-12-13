@@ -2,7 +2,6 @@ package lab.idioglossia.row.server.ws;
 
 import lab.idioglossia.row.server.config.Naming;
 import lab.idioglossia.row.server.config.properties.WebSocketProperties;
-import lab.idioglossia.row.server.domain.RowWebsocketSession;
 import lab.idioglossia.row.server.repository.RowSessionRegistry;
 import lab.idioglossia.row.server.repository.SubscriptionRegistry;
 import lab.idioglossia.row.server.service.ProtocolService;
@@ -37,11 +36,7 @@ public class RowWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String userId = WebsocketSessionUtil.getUserId(session);
         Object extra = session.getAttributes().get(Naming.EXTRA_ATTRIBUTE_NAME);
-        rowSessionRegistry.addSession(RowWebsocketSession.builder()
-                .session(new ConcurrentWebSocketSessionDecorator(session, (int) webSocketProperties.getMaximumAsyncSendTimeout(), webSocketProperties.getMaxBinaryBuffer()))
-                .userId(userId)
-                .extra(extra)
-                .build());
+        rowSessionRegistry.addSession(new SpringRowServerWebsocket(new ConcurrentWebSocketSessionDecorator(session, (int) webSocketProperties.getMaximumAsyncSendTimeout(), webSocketProperties.getMaxBinaryBuffer()), userId, extra));
         updateHeartbeat(session);
         rowWsListener.onOpen(session);
     }
@@ -74,7 +69,7 @@ public class RowWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public boolean supportsPartialMessages() {
-        return true;
+        return false;
     }
 
     //--------------------

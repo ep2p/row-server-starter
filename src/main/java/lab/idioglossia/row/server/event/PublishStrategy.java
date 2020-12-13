@@ -1,8 +1,7 @@
 package lab.idioglossia.row.server.event;
 
-import lab.idioglossia.row.server.domain.RowWebsocketSession;
+import lab.idioglossia.row.server.ws.RowServerWebsocket;
 import lombok.Getter;
-import org.springframework.web.socket.TextMessage;
 
 import java.io.IOException;
 
@@ -16,9 +15,9 @@ public interface PublishStrategy {
             }
 
             @Override
-            public void publish(String json, RowWebsocketSession rowWebsocketSession, Subscription subscription) throws IOException {
-                if(subscription.info().getSessionId().equals(rowWebsocketSession.getSession().getId())){
-                    rowWebsocketSession.getSession().sendMessage(new TextMessage(json));
+            public void publish(String json, RowServerWebsocket<?> rowServerWebsocket, Subscription subscription) throws IOException {
+                if(subscription.info().getSessionId().equals(rowServerWebsocket.getId())){
+                    rowServerWebsocket.sendTextMessage(json);
                 }
             }
         }),
@@ -29,8 +28,8 @@ public interface PublishStrategy {
             }
 
             @Override
-            public void publish(String json, RowWebsocketSession rowWebsocketSession, Subscription subscription) throws IOException {
-                rowWebsocketSession.getSession().sendMessage(new TextMessage(json));
+            public void publish(String json, RowServerWebsocket<?> rowServerWebsocket, Subscription subscription) throws IOException {
+                rowServerWebsocket.sendTextMessage(json);
             }
         });
 
@@ -42,5 +41,5 @@ public interface PublishStrategy {
     }
 
     String name();
-    void publish(String json, RowWebsocketSession rowWebsocketSession, Subscription subscription) throws IOException;
+    void publish(String json, RowServerWebsocket<?> rowServerWebsocket, Subscription subscription) throws IOException;
 }

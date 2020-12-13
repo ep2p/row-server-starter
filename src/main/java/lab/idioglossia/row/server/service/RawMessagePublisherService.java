@@ -2,9 +2,8 @@ package lab.idioglossia.row.server.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lab.idioglossia.row.server.domain.RowWebsocketSession;
 import lab.idioglossia.row.server.domain.protocol.ResponseDto;
-import org.springframework.web.socket.TextMessage;
+import lab.idioglossia.row.server.ws.RowServerWebsocket;
 
 import java.io.IOException;
 
@@ -15,17 +14,17 @@ public class RawMessagePublisherService {
         this.objectMapper = objectMapper;
     }
 
-    public void publish(RowWebsocketSession rowWebsocketSession, Object message) throws IOException {
+    public void publish(RowServerWebsocket<?> rowServerWebsocket, Object message) throws IOException {
         ResponseDto responseDto = new ResponseDto();
         responseDto.setBody(message);
-        rowWebsocketSession.getSession().sendMessage(new TextMessage(objectMapper.writeValueAsString(responseDto)));
+        rowServerWebsocket.sendTextMessage(objectMapper.writeValueAsString(responseDto));
     }
 
-    public void publish(RowWebsocketSession rowWebsocketSession, String message) throws IOException {
+    public void publish(RowServerWebsocket<?> rowServerWebsocket, String message) throws IOException {
         ResponseDto responseDto = new ResponseDto();
         JsonNode jsonNode = objectMapper.valueToTree(message);
         responseDto.setBody(jsonNode);
-        rowWebsocketSession.getSession().sendMessage(new TextMessage(objectMapper.writeValueAsString(responseDto)));
+        rowServerWebsocket.sendTextMessage(objectMapper.writeValueAsString(responseDto));
     }
 
 }

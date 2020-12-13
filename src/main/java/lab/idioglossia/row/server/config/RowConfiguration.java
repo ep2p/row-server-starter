@@ -136,6 +136,7 @@ public class RowConfiguration {
 
     @Bean("rowWebSocketHandler")
     @DependsOn({"rowSessionRegistry", "protocolService", "rowWsListener", "subscriptionRegistry"})
+    @ConditionalOnMissingBean(value = WebSocketHandler.class, name = "rowWebSocketHandler")
     public WebSocketHandler rowWebSocketHandler(RowSessionRegistry rowSessionRegistry, ProtocolService protocolService, RowWsListener rowWsListener, SubscriptionRegistry subscriptionRegistry){
         return new RowWebSocketHandler(rowSessionRegistry, webSocketProperties, rowWsListener, subscriptionRegistry, protocolService, handlerProperties.isTrackHeartbeats());
     }

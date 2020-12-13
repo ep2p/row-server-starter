@@ -1,13 +1,13 @@
 package lab.idioglossia.row.server.filter;
 
 import lab.idioglossia.row.server.domain.RowResponseStatus;
-import lab.idioglossia.row.server.domain.RowWebsocketSession;
 import lab.idioglossia.row.server.domain.protocol.RequestDto;
 import lab.idioglossia.row.server.domain.protocol.ResponseDto;
 import lab.idioglossia.row.server.event.Subscription;
 import lab.idioglossia.row.server.exception.InvalidPathException;
 import lab.idioglossia.row.server.service.SubscriberService;
 import lab.idioglossia.row.server.utl.RequestResponseUtil;
+import lab.idioglossia.row.server.ws.RowServerWebsocket;
 
 public class SubscribeFilter implements RowFilter {
     private final SubscriberService subscriberService;
@@ -19,7 +19,7 @@ public class SubscribeFilter implements RowFilter {
     }
 
     @Override
-    public boolean filter(RequestDto requestDto, ResponseDto responseDto, RowWebsocketSession rowWebsocketSession) throws Exception {
+    public boolean filter(RequestDto requestDto, ResponseDto responseDto, RowServerWebsocket<?> rowServerWebsocket) throws Exception {
         try {
             if(RequestResponseUtil.isUnSubscribing(requestDto)){
                 subscriberService.handleUnsubscribe(requestDto, pre);

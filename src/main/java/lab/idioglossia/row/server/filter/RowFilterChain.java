@@ -1,8 +1,8 @@
 package lab.idioglossia.row.server.filter;
 
-import lab.idioglossia.row.server.domain.RowWebsocketSession;
 import lab.idioglossia.row.server.domain.protocol.RequestDto;
 import lab.idioglossia.row.server.domain.protocol.ResponseDto;
+import lab.idioglossia.row.server.ws.RowServerWebsocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 
@@ -22,7 +22,7 @@ public class RowFilterChain {
         filters.add(rowFilter);
     }
 
-    public boolean hasFilter(Class c){
+    public boolean hasFilter(Class<?> c){
         for (RowFilter filter : filters) {
             if (filter.getClass().equals(c)) {
                 return true;
@@ -31,7 +31,7 @@ public class RowFilterChain {
         return false;
     }
 
-    public void addFilterBefore(RowFilter rowFilter, Class before){
+    public void addFilterBefore(RowFilter rowFilter, Class<?> before){
         for (RowFilter filter : filters) {
             if(filter.getClass().equals(before)){
                 int i = filters.indexOf(filter);
@@ -42,7 +42,7 @@ public class RowFilterChain {
         }
     }
 
-    public void addFilterAfter(RowFilter rowFilter, Class after){
+    public void addFilterAfter(RowFilter rowFilter, Class<?> after){
         for (RowFilter filter : filters) {
             if(filter.getClass().equals(after)){
                 int i = filters.indexOf(filter);
@@ -53,9 +53,9 @@ public class RowFilterChain {
         }
     }
 
-    public void filter(RequestDto requestDto, ResponseDto response, RowWebsocketSession rowWebsocketSession) throws Exception {
+    public void filter(RequestDto requestDto, ResponseDto response, RowServerWebsocket<?> rowServerWebsocket) throws Exception {
         for (RowFilter filter : filters) {
-            if (!filter.filter(requestDto, response, rowWebsocketSession)) {
+            if (!filter.filter(requestDto, response, rowServerWebsocket)) {
                 return;
             }
         }

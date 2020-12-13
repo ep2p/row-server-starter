@@ -1,11 +1,11 @@
 package lab.idioglossia.row.server.filter;
 
 import lab.idioglossia.row.server.domain.RowResponseStatus;
-import lab.idioglossia.row.server.domain.RowWebsocketSession;
 import lab.idioglossia.row.server.domain.protocol.RequestDto;
 import lab.idioglossia.row.server.domain.protocol.ResponseDto;
 import lab.idioglossia.row.server.exception.InvalidPathException;
 import lab.idioglossia.row.server.service.RowInvokerService;
+import lab.idioglossia.row.server.ws.RowServerWebsocket;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -17,7 +17,7 @@ public class RowInvokerFiler implements RowFilter {
     }
 
     @Override
-    public boolean filter(RequestDto requestDto, ResponseDto responseDto, RowWebsocketSession rowWebsocketSession) throws Exception {
+    public boolean filter(RequestDto requestDto, ResponseDto responseDto, RowServerWebsocket<?> rowServerWebsocket) throws Exception {
         try {
             Object invoke = rowInvokerService.invoke(requestDto, responseDto);
             responseDto.setBody(invoke);

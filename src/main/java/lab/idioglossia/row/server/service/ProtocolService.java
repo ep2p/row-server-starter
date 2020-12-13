@@ -9,13 +9,12 @@ import lab.idioglossia.row.server.context.DefaultContextImpl;
 import lab.idioglossia.row.server.context.RowContextHolder;
 import lab.idioglossia.row.server.context.RowUser;
 import lab.idioglossia.row.server.domain.RowResponseStatus;
-import lab.idioglossia.row.server.domain.RowWebsocketSession;
 import lab.idioglossia.row.server.domain.protocol.RequestDto;
 import lab.idioglossia.row.server.domain.protocol.ResponseDto;
 import lab.idioglossia.row.server.filter.RowFilterChain;
+import lab.idioglossia.row.server.ws.RowServerWebsocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -37,10 +36,10 @@ public class ProtocolService {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
-    public boolean handle(RowWebsocketSession webSocketSession, TextMessage textMessage){
+    public boolean handle(RowServerWebsocket<?> rowServerWebsocket, TextMessage textMessage){
         log.trace("Received message: " + textMessage.getPayload());
         String payload = textMessage.getPayload();
-        fillContext(webSocketSession.getSession());
+        fillContext(rowServerWebsocket);
         ResponseDto responseDto = ResponseDto.builder().status(RowResponseStatus.OK.getId()).build();
         String requestId = null;
         try {
@@ -59,7 +58,7 @@ public class ProtocolService {
                         .build();
             }else {
                 responseDto.setRequestId(requestId);
-                rowFilterChain.filter(requestDto, responseDto, webSocketSession);
+                rowFilterChain.filter(requestDto, responseDto, rowServerWebsocket);
             }
         } catch (JsonProcessingException e) {
             responseDto = ResponseDto.builder()
@@ -75,18 +74,20 @@ public class ProtocolService {
         try {
             String responsePayload = objectMapper.writeValueAsString(responseDto);
             log.trace("Sending response: "+ responsePayload);
-            webSocketSession.getSession().sendMessage(new TextMessage(responsePayload));
+            rowServerWebsocket.sendTextMessage(responsePayload);
         } catch (IOException e) {
             log.error("Failed to publish response to websocket", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return true;
     }
 
-    private void fillContext(WebSocketSession webSocketSession) {
+    private void fillContext(RowServerWebsocket<?> rowServerWebsocket) {
         RowContextHolder.setContext(
                 new DefaultContextImpl(
-                        new RowUser((String) webSocketSession.getAttributes().get(Naming.USER_ID_ATTRIBUTE_NAME), webSocketSession.getId()), true
+                        new RowUser((String) rowServerWebsocket.getAttributes().get(Naming.USER_ID_ATTRIBUTE_NAME), rowServerWebsocket.getId()), true
                 )
         );
     }
