@@ -5,32 +5,44 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.7.RELEASE</version>
+		<version>2.4.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>lab.idioglossia</groupId>
+
+	<groupId>io.ep2p</groupId>
 	<artifactId>row-server-starter</artifactId>
 	<version>2.1.0-RELEASE</version>
 	<name>Springboot Rest Over Websocket Starter</name>
 	<description>Spring boot starter for Rest Over Websocket</description>
+	<url>https://github.com/ep2p/row-server-starter</url>
+	<packaging>jar</packaging>
+
+	<licenses>
+		<license>
+			<name>GPL-3.0 License</name>
+			<url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+		</license>
+	</licenses>
+
 	<developers>
 		<developer>
-			<id>sepehr-gh</id>
 			<name>Sepehr Ghorbanpoor</name>
-			<organization>Idioglossia Lab</organization>
-			<organizationUrl>https://idioglossia.github.io/</organizationUrl>
-			<url>https://github.com/sepehr-gh</url>
 			<email>sepehrgh01@gmail.com</email>
-			<timezone>Asia/Tehran</timezone>
-			<roles>
-				<role>OWNER</role>
-				<role>DEVELOPER</role>
-			</roles>
+			<organization>Eleuth P2P</organization>
+			<organizationUrl>https://ep2p.io</organizationUrl>
 		</developer>
 	</developers>
 
+	<scm>
+		<connection>scm:git:git://github.com/ep2p/row-server-starter.git</connection>
+		<developerConnection>scm:git:ssh://github.com:ep2p/row-server-starter.git</developerConnection>
+		<url>http://github.com/ep2p/somnia/tree/master</url>
+	</scm>
+
 	<properties>
-		<java.version>1.8</java.version>
+		<maven.compiler.source>8</maven.compiler.source>
+		<maven.compiler.target>8</maven.compiler.target>
+		<java.version>8</java.version>
 	</properties>
 
 	<dependencies>
@@ -99,4 +111,68 @@
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
