@@ -36,7 +36,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/ep2p/row-server-starter.git</connection>
 		<developerConnection>scm:git:ssh://github.com:ep2p/row-server-starter.git</developerConnection>
-		<url>http://github.com/ep2p/somnia/tree/master</url>
+		<url>http://github.com/ep2p/row-client-starter/tree/master</url>
 	</scm>
 
 	<properties>
